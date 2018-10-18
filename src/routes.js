@@ -1,29 +1,25 @@
-import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
+import { createStackNavigator, createBottomTabNavigator, DrawerNavigator } from 'react-navigation';
 import React from 'react';
 import { Text } from 'react-native';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
 
 import Home from './pages/home';
 import New from './pages/new';
-import Edit from './pages/edit';
+import Details from './pages/details';
 
 const HomeStack = createStackNavigator({
-  Home,
-});
-
-const EditStack = createStackNavigator({
-  Edit,
+  Home:Home,
+  Details:Details
 });
 
 const NewStack = createStackNavigator({
-  New,
+  Novo:New
 });
 
 export default TabNavigator = createBottomTabNavigator(
   {
-    Início: HomeStack,
-    Editar: EditStack,
-    Novo: NewStack
+    Início:HomeStack,
+    Novo:NewStack
   },
   {
     navigationOptions: ({ navigation }) => ({
@@ -35,8 +31,6 @@ export default TabNavigator = createBottomTabNavigator(
             break;
           case 'Novo': iconName = Icons.plus;
             break;
-          case 'Editar': iconName = Icons.edit;
-            break;
         }           
        return <Text style={{margin: 5, fontSize: 25, textAlign: 'left'}}>
                 <FontAwesome>{iconName}</FontAwesome>
@@ -45,7 +39,7 @@ export default TabNavigator = createBottomTabNavigator(
     }),
     tabBarOptions: {
       activeTintColor: '#38ADA9',
-      inactiveTintColor: 'gray',
-    },
+      inactiveTintColor: 'gray'
+    }
   }
 );

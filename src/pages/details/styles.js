@@ -5,7 +5,7 @@ const Styles = StyleSheet.create({
         marginTop: 10,
         marginHorizontal: 10
     },  
-    item: {
+    ContainerItem: {
       flexBasis: 0,
       alignItems: "center",
       backgroundColor: "#FFF",
@@ -13,14 +13,16 @@ const Styles = StyleSheet.create({
       margin: 4,
       padding: 20,
       borderRadius: 5,
-      flexDirection: 'row'
+      flexDirection: 'row',
     },
-    text: {
-      color: "#333333",
+    itemName: {
+      fontSize: 20,
       flex:1
-    },
-    IconItem: {
-        fontSize: 30
+    },  
+    itemText: {
+        fontSize:20,
+        marginHorizontal:20,
+        marginTop:5
     }
   });
 

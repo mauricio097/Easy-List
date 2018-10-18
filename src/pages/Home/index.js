@@ -1,6 +1,7 @@
 import React,{Component} from 'react';
-import { View, Text, FlatList } from 'react-native';
- import Styles from './styles';
+import { View, Text, FlatList, TouchableHighlight } from 'react-native';
+import Styles from './styles';
+import FontAwesome, { Icons } from 'react-native-fontawesome';
 
 export default class Home extends Component{
 
@@ -9,7 +10,7 @@ export default class Home extends Component{
     headerStyle:{
       backgroundColor: "#38ADA9"
     },
-    headerTintColor: "#FFF"
+    headerTintColor: "#FFF",
   };
 
   state = {
@@ -20,37 +21,27 @@ export default class Home extends Component{
       { id: "03", name: "Cruz Ramirez" }
     ]
   };
-  
-  createRows(data, columns) {
-    const rows = Math.floor(data.length / columns);
-    let lastRowElements = data.length - rows * columns;
-    while (lastRowElements !== columns){
-      data.push({
-        id: `empty-${lastRowElements}`,
-        name: `empty-${lastRowElements}`,
-        empty: true
-      });
-      lastRowElements += 1;
-    }
-    return data;
-  }
+
+  selectItem = () => {
+    this.props.navigation.navigate('Details')
+  };
 
   render(){
-    const columns = 3;
     return(
       <View style={Styles.ViewGrid}>
           <FlatList
-          data={this.createRows(this.state.data, columns)}
+          data={this.state.data}
           keyExtractor={item => item.id}
-          numColumns={columns}
           renderItem={({ item }) => {
-            if (item.empty) {
-              return <View style={[Styles.item, Styles.itemEmpty]} />;
-            }
             return (
-              <View style={Styles.item}>
-                <Text style={Styles.text}>{item.name}</Text>
-              </View>
+              <TouchableHighlight onPress={this.selectItem}>
+                <View style={Styles.item}>
+                  <Text style={Styles.text}>{item.name}</Text>
+                  <Text style={Styles.IconItem}>
+                    <FontAwesome>{Icons.angleRight}</FontAwesome>
+                  </Text>
+                </View>
+              </TouchableHighlight>
             );
           }}
         />

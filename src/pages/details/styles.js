@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 const Styles = StyleSheet.create({
     ViewGrid: {
         marginTop: 10,
-        marginHorizontal: 10
+        marginHorizontal: 10,
     },  
     ContainerItem: {
       flexBasis: 0,
@@ -18,11 +18,19 @@ const Styles = StyleSheet.create({
     itemName: {
       fontSize: 20,
       flex:1
-    },  
+    }, 
+    itemIcon: {
+      fontSize: 25,
+      flex:1
+    },   
     itemText: {
-        fontSize:20,
         marginHorizontal:20,
         marginTop:5
+    },
+    headerRight:{
+      fontSize:25,
+      color: '#fff',
+      marginHorizontal: 15
     }
   });
 

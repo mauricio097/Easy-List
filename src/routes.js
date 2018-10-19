@@ -1,4 +1,4 @@
-import { createStackNavigator, createBottomTabNavigator, DrawerNavigator } from 'react-navigation';
+import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 import React from 'react';
 import { Text } from 'react-native';
 import FontAwesome, { Icons } from 'react-native-fontawesome';

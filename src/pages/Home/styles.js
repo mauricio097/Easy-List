@@ -4,7 +4,7 @@ const Styles = StyleSheet.create({
     ViewGrid: {
         marginTop: 10,
         marginHorizontal: 10
-    },  
+    }, 
     item: {
       flexBasis: 0,
       alignItems: "center",
@@ -21,7 +21,7 @@ const Styles = StyleSheet.create({
     },
     IconItem: {
         fontSize: 30
-    }
+    },
   });
 
 export default Styles;

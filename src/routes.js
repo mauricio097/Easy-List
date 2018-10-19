@@ -6,10 +6,12 @@ import FontAwesome, { Icons } from 'react-native-fontawesome';
 import Home from './pages/home';
 import New from './pages/new';
 import Details from './pages/details';
+import Edit from './pages/edit';
 
 const HomeStack = createStackNavigator({
   Home:Home,
-  Details:Details
+  Details:Details,
+  Edit:Edit
 });
 
 const NewStack = createStackNavigator({

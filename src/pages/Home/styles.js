@@ -16,12 +16,17 @@ const Styles = StyleSheet.create({
       flexDirection: 'row'
     },
     text: {
-      color: "#333333",
-      flex:1
+     // color: "#333333",
+      flex:1,
+      fontSize: 20
     },
     IconItem: {
         fontSize: 30
     },
+    icon: {
+      color: '#FFF',
+      fontSize: 32,
+  },
   });
 
 export default Styles;

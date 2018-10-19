@@ -31,6 +31,14 @@ const Styles = StyleSheet.create({
       fontSize:25,
       color: '#fff',
       marginHorizontal: 15
+    },
+    icon: {
+      color: '#FFF',
+      fontSize: 28,
+    },
+    textIcon: {
+      color: '#FFF',
+      fontSize: 15,
     }
   });
 

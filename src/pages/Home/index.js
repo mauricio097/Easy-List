@@ -2,20 +2,21 @@ import React,{Component} from 'react';
 import { View, Text, FlatList, TouchableOpacity} from 'react-native';
 import Styles from './styles';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
-//import Header from '../../components/header';
+import Header from '../../components/header';
 
 export default class Home extends Component{
 
   static navigationOptions = {
     
-      title: 'Easy List',
+      header: null
+      /*title: 'Easy List',
         headerStyle: {
           backgroundColor: '#38ADA9',
         },
         headerTintColor: '#fff',
         headerTitleStyle: {
           fontWeight: 'bold',
-        }
+        }*/
   };
 
   constructor(props){
@@ -50,6 +51,10 @@ export default class Home extends Component{
   render(){
     return(
       <View>
+        <Header title='Easy List' 
+          leftComponent={ null} 
+          rightComponent={null}
+          />
         <View style={Styles.ViewGrid}>
             <FlatList
             data={this.state.data}

@@ -8,7 +8,8 @@ import Header from '../../components/header';
 
 export default class New extends Component{
     static navigationOptions = {
-        title: 'Easy Buy',
+        header: null
+        /*title: 'Easy Buy',
         headerStyle: {
           backgroundColor: '#38ADA9',
         },
@@ -22,7 +23,7 @@ export default class New extends Component{
             <FontAwesome>{Icons.angleRight}</FontAwesome>
           </TouchableOpacity>
           
-        )
+        )*/
       };
 
     constructor(props){
@@ -45,8 +46,17 @@ export default class New extends Component{
     render(){
         return(
             <View>
-                <Header title='Teste' />
-                <View style={Styles.container}>
+                <Header title='Hello World'/>     
+            </View>
+                
+                    
+              
+        )
+    }
+};
+
+/*
+<View style={Styles.container}>
                     <TextInput
                         style={Styles.inputNameList}
                         onChangeText={(name) => this.setState({name})}
@@ -81,11 +91,4 @@ export default class New extends Component{
                         keyExtractor={item => item.id}
                     />
 
-                </View>
-            </View>
-                
-                    
-              
-        )
-    }
-};
+                </View>*/

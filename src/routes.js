@@ -10,7 +10,8 @@ import Edit from './pages/edit';
 
 const HomeStack = createStackNavigator({
   Home:Home,
-  Details:Details
+  Details:Details,
+  Edit
 });
 
 const NewStack = createStackNavigator({

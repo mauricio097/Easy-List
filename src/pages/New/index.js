@@ -46,7 +46,33 @@ export default class New extends Component{
     render(){
         return(
             <View>
-                <Header title='Hello World'/>     
+                <Header title='Nova Lista'
+                rightComponent=
+                {<TouchableOpacity onPress={() => this.editData()}>
+                  <Text style={Styles.textIcon}>Criar</Text>
+                </TouchableOpacity>}
+                /> 
+                
+                <View style={Styles.ViewGrid}>
+
+                <TextInput style={{backgroundColor:'#FFF'}}></TextInput>
+            <FlatList
+            data={this.state.data}
+            keyExtractor={item => item.id}
+            renderItem={({ item }) => {
+              return (
+                <TouchableOpacity onPress={ ()=> this.selectItem(item)}>
+                  <View style={Styles.item}>
+                    <Text style={Styles.text}>{item.name}</Text>
+                    <Text style={Styles.IconItem}>
+                      <FontAwesome>{Icons.angleRight}</FontAwesome>
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              );
+            }}
+          />
+        </View>    
             </View>
                 
                     

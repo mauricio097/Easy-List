@@ -16,7 +16,7 @@ const Styles = StyleSheet.create({
       flexDirection: 'row',
     },
     itemName: {
-      fontSize: 25,
+      fontSize: 20,
       flex:1
     }, 
     itemIcon: {
@@ -39,8 +39,6 @@ const Styles = StyleSheet.create({
     textIcon: {
       color: '#FFF',
       fontSize: 15,
-      fontWeight: 'bold'
-
     }
   });
 

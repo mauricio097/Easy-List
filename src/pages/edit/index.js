@@ -4,14 +4,12 @@ import Styles from './styles';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
 import Header from '../../components/header';
 
-export default class Details extends Component {
+export default class Edit extends Component {
 
   constructor(props) {
     super(props);
 
     this.state = {
-      editable: true,
-      teste:'',
       data: [],
     };
   }
@@ -24,12 +22,12 @@ export default class Details extends Component {
     this.setState({ data: this.props.navigation.state.params });
   }
 
-  editData() {
-    this.props.navigation.navigate('Edit',this.state.data);
+  handlerClick() {
+    this.setState({editable:true});
   }
 
   goBack() {
-    this.props.navigation.navigate('Home');
+    this.props.navigation.navigate('Details');
   }
 
   render() {
@@ -44,8 +42,8 @@ export default class Details extends Component {
           }
 
           rightComponent=
-          {<TouchableOpacity onPress={() => this.editData()}>
-            <Text style={Styles.textIcon}>Editar</Text>
+          {<TouchableOpacity onPress={() => this.handlerClick()}>
+            <Text style={Styles.textIcon}>Salvar</Text>
           </TouchableOpacity>}
         />
         <View style={Styles.ViewGrid}>
@@ -55,18 +53,23 @@ export default class Details extends Component {
             renderItem={({ item }) => {
               return (
                 <View style={Styles.ContainerItem}>
-                  <View style={Styles.itemText}> 
-                    <Text style={Styles.itemName}>{item.name}</Text>
-                  </View>            
                   <View style={Styles.itemText}>
-                    <Text style={Styles.itemIcon} >                      
-                      <FontAwesome>{Icons.dollar}</FontAwesome> {item.price}                  
-                    </Text>                                 
+                  <TextInput style={{backgroundColor:'#E7E7E7'}} defaultValue={item.name} 
+                  editable={this.props.enabled}/>
                   </View>
                   <View style={Styles.itemText}>
-                    <Text style={Styles.itemIcon}> 
-                      <FontAwesome>{Icons.shoppingCart}</FontAwesome>  {item.quantity}                   
-                    </Text>                                   
+                    <Text style={Styles.itemIcon} >
+                      <FontAwesome>{Icons.dollar}</FontAwesome>
+                    </Text>
+                    <TextInput style={{backgroundColor:'#E7E7E7'}} defaultValue={item.price} keyboardType = 'numeric'
+                    editable={this.state.editable}/>
+                  </View>
+                  <View style={Styles.itemText}>
+                    <Text style={Styles.itemIcon}>
+                      <FontAwesome>{Icons.arrowCircleORight}</FontAwesome>
+                    </Text>
+                    <TextInput style={{backgroundColor:'#E7E7E7'}} defaultValue={item.quantity} keyboardType = 'numeric'
+                    editable={this.state.editable}/>
                   </View>
                 </View>
               );

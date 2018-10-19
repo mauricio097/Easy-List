@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity,TextInput } from 'react-native';
 import Styles from './styles';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
 import Header from '../../components/header';
@@ -8,22 +8,24 @@ export default class Details extends Component {
 
   constructor(props) {
     super(props);
+
+    this.state = {
+      data: [],
+    };
   }
 
   static navigationOptions = {
     header: null
   };
 
-  state = {
-    data: []
-  };
+  
 
   componentDidMount() {
     this.setState({ data: this.props.navigation.state.params });
   }
 
   editData() {
-    this.props.navigation.navigate('edit');
+    //this.props.navigation.navigate('Edit',this.state.data);
   }
 
   goBack() {
@@ -33,7 +35,7 @@ export default class Details extends Component {
   render() {
     return (
       <View>
-        <Header title='Detalhes'
+        <Header title={this.state.data.name}
           leftComponent=
           {
             <TouchableOpacity onPress={() => this.goBack()}>
@@ -53,16 +55,20 @@ export default class Details extends Component {
             renderItem={({ item }) => {
               return (
                 <View style={Styles.ContainerItem}>
-                  <Text style={Styles.itemName}>{item.name}</Text>
+                  <View style={Styles.itemText}>
+                  <TextInput style={{backgroundColor:'#E7E7E7'}} defaultValue={item.name}/>
+                  </View>
                   <View style={Styles.itemText}>
                     <Text style={Styles.itemIcon} >
-                      <FontAwesome>{Icons.dollar} {item.price} </FontAwesome>
+                      <FontAwesome>{Icons.dollar}</FontAwesome>
                     </Text>
+                    <TextInput style={{backgroundColor:'#E7E7E7'}} defaultValue={item.price} keyboardType = 'numeric'/>
                   </View>
                   <View style={Styles.itemText}>
                     <Text style={Styles.itemIcon}>
-                      <FontAwesome>{Icons.arrowCircleORight} {item.quantity}</FontAwesome>
+                      <FontAwesome>{Icons.arrowCircleORight}</FontAwesome>
                     </Text>
+                    <TextInput style={{backgroundColor:'#E7E7E7'}} defaultValue={item.quantity} keyboardType = 'numeric'/>
                   </View>
                 </View>
               );

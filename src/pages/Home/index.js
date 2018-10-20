@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { View, Text, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, AsyncStorage } from 'react-native';
 import Styles from './styles';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
 import Header from '../../components/header';
+import Api from '../../services/api';
 
 export default class Home extends Component {
 
@@ -15,36 +16,37 @@ export default class Home extends Component {
   }
 
   state = {
-    data: [
-      {
-        id: "00",
-        name: "Lista Savegnago",
-        items: [
-          { id: "00", name: "Café", price: "2.19", quantity: "2" },
-          { id: "01", name: "Açucar", price: "3.50", quantity: "5" },
-          { id: "02", name: "Feijão", price: "5.96", quantity: "2" }
-        ]
-      },
-      {
-        id: "01",
-        name: "Lista 2",
-        items: [
-          { id: "00", name: "Café", price: "2.19", quantity: "2" },
-          { id: "01", name: "Açucar", price: "3.50", quantity: "5" },
-          { id: "02", name: "Aveia", price: "5.96", quantity: "2" }
-        ]
-      }
-    ]
+    data: []
   };
 
   selectItem(item) {
     this.props.navigation.navigate('Details', item);
   };
 
+  componentDidMount(){
+    this.getList();
+  }
+
+  async getList(){
+    try {
+        const token = await AsyncStorage.getItem('@EasyList:token');
+
+        const response = await Api.get('/list/user/1', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        this.setState({ data: response.data });
+    } catch(error){
+        alert(error);//this.setState({error: error});
+    }
+  };
+
   render() {
     return (
       <View>
-        <Header title='Easy List' />
+        <Header title='EasyList' />
         <View style={Styles.containerView}>
           <FlatList
             data={this.state.data}

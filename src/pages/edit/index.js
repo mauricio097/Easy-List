@@ -22,10 +22,6 @@ export default class Edit extends Component {
     this.setState({ data: this.props.navigation.state.params });
   }
 
-  handlerClick() {
-    this.setState({ editable: true });
-  }
-
   goBack() {
     this.props.navigation.navigate('Details');
   }

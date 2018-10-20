@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, StatusBar, Image, TextInput, TouchableOpacity } from 'react-native';
 import Styles from './styles';
+import Api from '../../services/api';
 
 export default class register extends Component {
 
@@ -10,11 +11,47 @@ export default class register extends Component {
 
     constructor(props) {
         super(props);
+    }
 
-        state = {
-            inputEmail: '',
-            inputPassword: ''
+    state = {
+        inputName: '',
+        inputEmail: '',
+        inputPassword: '',
+        error: ''
+    }
+
+    handleNameChange = (name) => {
+        this.setState({inputName: name});
+    }
+
+    handleEmailChange = (email) => {
+        this.setState({inputEmail: email});
+    }
+
+    handlePasswordChange = (password) => {
+        this.setState({inputPassword: password});
+    }
+
+    handleRegisterPress = async () => {
+        if((this.state.inputEmail.length === 0) || (this.state.inputPassword.length === 0)
+         || (this.state.inputName.length === 0)
+        ){
+            this.setState({error: 'Os campos devem sem preenchidos'}, () => false);
         }
+        else {
+          try{
+           const response = await Api.post('/user', {
+                name: this.state.inputName,
+                email: this.state.inputEmail,
+                password: this.state.inputPassword
+              });
+
+                this.props.navigation.navigate('Login');
+            
+            }catch(error){
+                this.setState({error: 'Erro ao Cadastrar Usuário'});
+            }
+          }
     }
 
 
@@ -45,10 +82,10 @@ export default class register extends Component {
                         secureTextEntry
                     />
 
-                    <TouchableOpacity style={Styles.buttonRegister}>
+                    <TouchableOpacity style={Styles.buttonRegister} onPress={this.handleRegisterPress}>
                         <Text style={Styles.textButtonRegister}>Cadastrar</Text>
                     </TouchableOpacity>
-
+                        <Text>{this.state.error}</Text>
                     <View>
 
                         <TouchableOpacity onPress={() => this.props.navigation.navigate('Login')}>
@@ -60,8 +97,3 @@ export default class register extends Component {
         );
     }
 };
-
-/*<Image                     
-                        style={Styles.logo}
-                        source={require('../../images/logo.png')} 
-                    />*/

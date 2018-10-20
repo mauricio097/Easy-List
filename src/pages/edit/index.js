@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, FlatList, TouchableOpacity,TextInput } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, TextInput } from 'react-native';
 import Styles from './styles';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
 import Header from '../../components/header';
@@ -23,7 +23,7 @@ export default class Edit extends Component {
   }
 
   handlerClick() {
-    this.setState({editable:true});
+    this.setState({ editable: true });
   }
 
   goBack() {
@@ -34,42 +34,42 @@ export default class Edit extends Component {
     return (
       <View>
         <Header title={this.state.data.name}
-          leftComponent=
-          {
+          leftComponent={
             <TouchableOpacity onPress={() => this.goBack()}>
-              <FontAwesome style={Styles.icon}>{Icons.arrowLeft} </FontAwesome>
+              <FontAwesome style={Styles.leftComponentIcon}>{Icons.arrowLeft}</FontAwesome>
             </TouchableOpacity>
           }
 
-          rightComponent=
-          {<TouchableOpacity onPress={() => this.handlerClick()}>
-            <Text style={Styles.textIcon}>Salvar</Text>
-          </TouchableOpacity>}
+          rightComponent={
+            <TouchableOpacity onPress={() => this.handlerClick()}>
+              <Text style={Styles.rightComponentIcon}>Salvar</Text>
+            </TouchableOpacity>
+          }
         />
-        <View style={Styles.ViewGrid}>
+        <View style={Styles.containerView}>
           <FlatList
             data={this.state.data.items}
             keyExtractor={item => item.id}
             renderItem={({ item }) => {
               return (
-                <View style={Styles.ContainerItem}>
-                  <View style={Styles.itemText}>
-                  <TextInput style={{backgroundColor:'#E7E7E7'}} defaultValue={item.name} 
-                  editable={this.props.enabled}/>
+                <View style={Styles.itemListView}>
+                  <View style={Styles.itemListText}>
+                    <TextInput style={Styles.itemListInput} defaultValue={item.name}
+                      editable={this.props.enabled} />
                   </View>
-                  <View style={Styles.itemText}>
-                    <Text style={Styles.itemIcon} >
+                  <View style={Styles.itemListText}>
+                    <Text style={Styles.itemListIcon} >
                       <FontAwesome>{Icons.dollar}</FontAwesome>
                     </Text>
-                    <TextInput style={{backgroundColor:'#E7E7E7'}} defaultValue={item.price} keyboardType = 'numeric'
-                    editable={this.state.editable}/>
+                    <TextInput style={Styles.itemListInput} defaultValue={item.price} 
+                      keyboardType='numeric' editable={this.state.editable} />
                   </View>
-                  <View style={Styles.itemText}>
-                    <Text style={Styles.itemIcon}>
+                  <View style={Styles.itemListText}>
+                    <Text style={Styles.itemListIcon}>
                       <FontAwesome>{Icons.arrowCircleORight}</FontAwesome>
                     </Text>
-                    <TextInput style={{backgroundColor:'#E7E7E7'}} defaultValue={item.quantity} keyboardType = 'numeric'
-                    editable={this.state.editable}/>
+                    <TextInput style={Styles.itemListInput} defaultValue={item.quantity} 
+                      keyboardType='numeric' editable={this.state.editable} />
                   </View>
                 </View>
               );
@@ -79,5 +79,4 @@ export default class Edit extends Component {
       </View>
     );
   }
-
 }

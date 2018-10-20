@@ -3,11 +3,12 @@ import React from 'react';
 import { Text } from 'react-native';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
 
-import Home from './pages/home';
-import New from './pages/new';
-import Details from './pages/details';
-import Edit from './pages/edit';
-import Login from './pages/login';
+import Home from './pages/Home';
+import New from './pages/New';
+import Details from './pages/Details';
+import Edit from './pages/Edit';
+import Login from './pages/Login';
+import Register from './pages/Register';
 
 const HomeStack = createStackNavigator({
   Home: Home,
@@ -23,11 +24,16 @@ const LoginStack = createStackNavigator({
   Login: Login
 });
 
+const RegisterStack = createStackNavigator({
+  Register: Register
+});
+
 
 
 export default TabNavigator = createBottomTabNavigator(
   {
     Login: { screen: LoginStack, navigationOptions:{tabBarVisible: false}},
+    Register: { screen: RegisterStack, navigationOptions:{tabBarVisible: false}},
     Início: { screen: HomeStack},
     Novo: { screen: NewStack}
   },

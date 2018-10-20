@@ -3,7 +3,7 @@ import React from 'react';
 import { Text } from 'react-native';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
 
-import Home from './pages/home';
+import Home  from './pages/home';
 import New from './pages/new';
 import Details from './pages/details';
 import Edit from './pages/edit';

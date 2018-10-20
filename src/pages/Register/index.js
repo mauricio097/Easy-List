@@ -1,48 +1,48 @@
-import React,{Component} from 'react';
-import {View,Text,StatusBar, Image, TextInput, TouchableOpacity} from 'react-native';
+import React, { Component } from 'react';
+import { View, Text, StatusBar, Image, TextInput, TouchableOpacity } from 'react-native';
 import Styles from './styles';
 
-export default class register extends Component{
-    
+export default class register extends Component {
+
     static navigationOptions = {
-        header: null,        
+        header: null,
     }
 
-    constructor(props){
+    constructor(props) {
         super(props);
 
-        state={
+        state = {
             inputEmail: '',
-            inputPassword:''
+            inputPassword: ''
         }
     }
 
-    
-    render(){
-        return(
-            <View style={Styles.contentView}>                
-               <View style={Styles.formView} >
-                    <TextInput  style={Styles.input}
-                                underlineColorAndroid="transparent"
-                                placeholder='Nome'
-                                onChangeText={(text) => this.setState({ inputName: text })}
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                    />                    
-                    <TextInput  style={Styles.input}
-                                underlineColorAndroid="transparent"
-                                placeholder='E-mail'
-                                onChangeText={(text) => this.setState({ inputEmail: text })}
-                                autoCapitalize="none"
-                                autoCorrect={false}
+
+    render() {
+        return (
+            <View style={Styles.contentView}>
+                <View style={Styles.formView} >
+                    <TextInput style={Styles.input}
+                        underlineColorAndroid="transparent"
+                        placeholder='Nome'
+                        onChangeText={(text) => this.setState({ inputName: text })}
+                        autoCapitalize="none"
+                        autoCorrect={false}
                     />
-                    <TextInput  style={Styles.input}
-                                underlineColorAndroid="transparent"
-                                placeholder='Senha'
-                                onChangeText={(text) => this.setState({ inputPassword: text })}
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                                secureTextEntry
+                    <TextInput style={Styles.input}
+                        underlineColorAndroid="transparent"
+                        placeholder='E-mail'
+                        onChangeText={(text) => this.setState({ inputEmail: text })}
+                        autoCapitalize="none"
+                        autoCorrect={false}
+                    />
+                    <TextInput style={Styles.input}
+                        underlineColorAndroid="transparent"
+                        placeholder='Senha'
+                        onChangeText={(text) => this.setState({ inputPassword: text })}
+                        autoCapitalize="none"
+                        autoCorrect={false}
+                        secureTextEntry
                     />
 
                     <TouchableOpacity style={Styles.buttonRegister}>
@@ -50,9 +50,9 @@ export default class register extends Component{
                     </TouchableOpacity>
 
                     <View>
-                        
+
                         <TouchableOpacity onPress={() => this.props.navigation.navigate('Login')}>
-                        <Text style={Styles.registerText}> Logar</Text>
+                            <Text style={Styles.registerText}> Logar</Text>
                         </TouchableOpacity>
                     </View>
                 </View>

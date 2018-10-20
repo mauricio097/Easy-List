@@ -1,29 +1,29 @@
 import { StyleSheet } from 'react-native';
 
 const Styles = StyleSheet.create({
-    contentView:{
+    contentView: {
         backgroundColor: '#38ADA9',
-        flex:1
+        flex: 1
     },
-    logo:{
-        width: '60%', 
-        height: '60%' 
+    logo: {
+        width: '60%',
+        height: '60%'
     },
-    formView:{
-        marginTop:15
+    formView: {
+        marginTop: 15
     },
-    input:{
-        backgroundColor:'#fff',
+    input: {
+        backgroundColor: '#fff',
         marginTop: 15,
         marginHorizontal: 30,
         borderRadius: 5
     },
-    registerText:{
-       marginTop: 15,
-       textAlign:'center',
-       color:'#FFF',
-       fontWeight: 'bold',
-       fontSize: 15
+    registerText: {
+        marginTop: 15,
+        textAlign: 'center',
+        color: '#FFF',
+        fontWeight: 'bold',
+        fontSize: 15
     },
     buttonLogin: {
         alignItems: 'center',
@@ -33,8 +33,8 @@ const Styles = StyleSheet.create({
         borderRadius: 5,
         marginTop: 20
     },
-    textButtonLogin:{
-        color:'#FFF'
+    textButtonLogin: {
+        color: '#FFF'
     }
 });
 

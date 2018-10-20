@@ -82,7 +82,15 @@ const Styles = StyleSheet.create({
     icon: {
       color: '#FFF',
       fontSize: 32,
-  },
+    },
+    ViewAdd:{
+        marginTop: 20,
+        marginHorizontal: 30,
+        borderRadius:5,
+        flexDirection: 'row',
+        height: 40
+        //flex:1
+    }
 });
 
 export default Styles;

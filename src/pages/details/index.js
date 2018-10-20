@@ -39,7 +39,7 @@ export default class Details extends Component {
           leftComponent=
           {
             <TouchableOpacity onPress={() => this.goBack()}>
-              <FontAwesome style={Styles.icon}>{Icons.arrowCircleOLeft} </FontAwesome>
+              <FontAwesome style={Styles.icon}>{Icons.arrowLeft} </FontAwesome>
             </TouchableOpacity>
           }
 

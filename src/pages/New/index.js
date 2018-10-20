@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
-import { View, TextInput, FlatList, Text , TouchableOpacity, ListItem } from 'react-native';
+import { View, TextInput, FlatList, Text , TouchableOpacity, ListItem, SectionList } from 'react-native';
 import Styles from './styles';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
 import Header from '../../components/header';
+import { Button } from 'react-native-elements';
 
 
 
@@ -29,7 +30,7 @@ export default class New extends Component{
     constructor(props){
         super(props);
         this.state = {
-            name: '',
+            Inputname: '',
             data: [
                 { id: "00", name: "Café", price: 2.19, quantity: 3 },
                 { id: "01", name: "Açucar", price: 3.00, quantity: 2 },               
@@ -37,41 +38,51 @@ export default class New extends Component{
                 { id: "04", name: "Feijão", price: 5.42, quantity: 1 }
             ]
         }
+
+        this.insertItem = this.insertItem.bind(this);
+
+
     }
 
     insertItem(){
-
+        let data = this.state.data;
+        let newItem = { id: "05", name: this.state.Inputname, price: 2.19, quantity: 3 } ;
+        data.push(newItem);
+        this.setState({data});
     }
     
     render(){
         return(
             <View>
-                <Header title='Nova Lista'
+                <Header title={'Nova Lista'}
                 rightComponent=
-                {<TouchableOpacity onPress={() => this.editData()}>
+                {<TouchableOpacity onPress={(text) => this.editData()}>
                   <Text style={Styles.textIcon}>Criar</Text>
                 </TouchableOpacity>}
                 /> 
                 
-                <View style={Styles.ViewGrid}>
+                <View style={Styles.ViewAdd}>
+                    <TextInput style={{backgroundColor:'#FFF',borderRadius:5,flex:1}} 
+                     underlineColorAndroid="transparent"
+                     onChangeText={(text) => this.setState({Inputname: text})}
+                     ></TextInput>
+                       <TouchableOpacity onPress={() => this.insertItem()}>
+                            <FontAwesome style={{fontSize:35,marginLeft:10,color:'#1E5C5A'}}>{Icons.plusSquare}</FontAwesome>
+                        </TouchableOpacity>            
+                </View>
 
-                <TextInput style={{backgroundColor:'#FFF'}}></TextInput>
-            <FlatList
-            data={this.state.data}
-            keyExtractor={item => item.id}
-            renderItem={({ item }) => {
-              return (
-                <TouchableOpacity onPress={ ()=> this.selectItem(item)}>
-                  <View style={Styles.item}>
-                    <Text style={Styles.text}>{item.name}</Text>
-                    <Text style={Styles.IconItem}>
-                      <FontAwesome>{Icons.angleRight}</FontAwesome>
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              );
-            }}
-          />
+                <View style={Styles.ViewGrid}>
+                <FlatList
+                        data={this.state.data}
+                        extraData={this.state}
+                        showsVerticalScrollIndicator={false}
+                        renderItem={({item}) =>
+                        <View style={Styles.item}>
+                        <Text style={Styles.text}>{item.name}</Text>                        
+                      </View>
+                        }
+                        keyExtractor={item => item.id}
+                    />  
         </View>    
             </View>
                 

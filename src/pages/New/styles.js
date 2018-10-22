@@ -1,10 +1,15 @@
 import {StyleSheet} from 'react-native';
+import Colors from '../../config/colors';
 
 const Styles = StyleSheet.create({
     rightComponentText: {
         color: '#FFF',
         fontSize: 16,
         fontWeight: 'bold'
+    },
+    leftComponentIcon:{
+        color: '#FFF',
+        fontSize: 20,
     },
     addBarView:{
         marginTop: 20,
@@ -21,7 +26,7 @@ const Styles = StyleSheet.create({
     addBarButton:{
         fontSize: 35, 
         marginLeft: 10, 
-        color: '#1E5C5A'
+        color: Colors.button
     },
     listItemView:{
         flexBasis: 0,

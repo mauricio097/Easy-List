@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, FlatList, TouchableOpacity, TextInput } from 'react-native';
 import Styles from './styles';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
-import Header from '../../components/header';
+import Header from '../../components/Header';
 
 export default class Details extends Component {
 

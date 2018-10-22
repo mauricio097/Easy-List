@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 const Styles = StyleSheet.create({
   leftComponentIcon: {
     color: '#FFF',
-    fontSize: 28,
+    fontSize: 20,
   },
   rightComponentText: {
     color: '#FFF',

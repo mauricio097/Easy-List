@@ -1,8 +1,9 @@
 import { StyleSheet } from 'react-native';
+import Colors from '../../config/colors';
 
 const Styles = StyleSheet.create({
     contentView: {
-        backgroundColor: '#38ADA9',
+        backgroundColor: Colors.background,
         flex: 1
     },
     logo: {
@@ -27,7 +28,7 @@ const Styles = StyleSheet.create({
     },
     buttonRegister: {
         alignItems: 'center',
-        backgroundColor: '#1E5C5A',
+        backgroundColor: Colors.button,
         padding: 10,
         marginHorizontal: 150,
         borderRadius: 5,

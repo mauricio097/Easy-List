@@ -1,6 +1,7 @@
 import React,{Component} from 'react';
 import { View,StyleSheet,Text, TouchableOpacity } from 'react-native';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
+import Styles from './styles';
 
 
 export default class header extends Component{
@@ -27,35 +28,4 @@ export default class header extends Component{
     }
 }
 
-const Styles = StyleSheet.create({
-    header:{
-        backgroundColor: '#38ADA9',
-        height: 50,
-        flexDirection: 'row',                
-    },
-    leftComponent: {        
-        height: 50,
-        flex: 0.1,
-        alignItems: 'center',
-        justifyContent:'center',
-        marginLeft: 5
-    },
-    centerComponent: {               
-        height: 50,
-        flex: 0.8,
-        alignItems: 'center',
-        justifyContent:'center'
-    },
-    rightComponent: {        
-        height: 50,        
-        alignItems:'center',
-        flex: 0.1,
-        justifyContent:'center',
-        marginHorizontal: 5
-    },
-    text: {
-        color: '#FFF',
-        fontSize: 20,
-        fontWeight: 'bold'
-    }
-});
+

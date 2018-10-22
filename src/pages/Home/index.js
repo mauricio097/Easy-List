@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, FlatList, TouchableOpacity, AsyncStorage } from 'react-native';
 import Styles from './styles';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
-import Header from '../../components/header';
+import Header from '../../components/Header';
 import Api from '../../services/api';
 
 export default class Home extends Component {
@@ -23,8 +23,12 @@ export default class Home extends Component {
     this.props.navigation.navigate('Details', item);
   };
 
+  handleAdd(){
+    this.props.navigation.navigate('Novo');
+  }
+
   componentDidMount(){
-    this.getList();
+    //this.getList();
   }
 
   async getList(){
@@ -45,27 +49,34 @@ export default class Home extends Component {
 
   render() {
     return (
-      <View>
+      <View style={Styles.contentView}>
         <Header title='EasyList' />
-        <View style={Styles.containerView}>
-          <FlatList
-            data={this.state.data}
-            keyExtractor={item => item.id}
-            renderItem={({ item }) => {
-              return (
-                <TouchableOpacity onPress={() => this.selectItem(item)}>
-                  <View style={Styles.itemListView}>
-                    <Text style={Styles.itemListText}>{item.name}</Text>
-                    <Text style={Styles.itemListIcon}>
-                      <FontAwesome>{Icons.angleRight}</FontAwesome>
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              );
-            }}
-          />
+          <View style={Styles.listView}>
+            <FlatList
+              data={this.state.data}
+              keyExtractor={item => item.id}
+              renderItem={({ item }) => {
+                return (
+                  <TouchableOpacity onPress={() => this.selectItem(item)}>
+                    <View style={Styles.itemListView}>
+                      <Text style={Styles.itemListText}>{item.name}</Text>
+                      <Text style={Styles.itemListIcon}>
+                        <FontAwesome>{Icons.angleRight}</FontAwesome>
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                );
+              }}
+            />
+          </View>
+          <View style={Styles.addButtonView}>
+            <TouchableOpacity style={Styles.buttonAdd} onPress={() => this.handleAdd()}>                  
+              <Text style={Styles.buttonNewText}>
+                <FontAwesome>{Icons.plus}</FontAwesome>
+              </Text>    
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
     );
   }
 }

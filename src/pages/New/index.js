@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { View, TextInput, FlatList, Text, TouchableOpacity} from 'react-native';
+import { View, TextInput, FlatList, Text, TouchableOpacity } from 'react-native';
 import Styles from './styles';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
-import Header from '../../components/header';
+import Header from '../../components/Header';
 
 
 export default class New extends Component {
@@ -34,11 +34,17 @@ export default class New extends Component {
         return (
             <View>
                 <Header title={'Nova Lista'}
-                    rightComponent= { 
+                    leftComponent={
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('Home')}>
+                          <FontAwesome style={Styles.leftComponentIcon}>{Icons.arrowLeft} </FontAwesome>
+                        </TouchableOpacity>
+                    }
+
+                    rightComponent={
                         <TouchableOpacity>
                             <Text style={Styles.rightComponentText}>Criar</Text>
                         </TouchableOpacity>
-                    } 
+                    }
                 />
 
                 <View style={Styles.addBarView}>

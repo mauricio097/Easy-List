@@ -4,6 +4,7 @@ import Styles from './styles';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
 import Header from '../../components/Header';
 import Api from '../../services/api';
+import { NavigationEvents } from 'react-navigation';
 
 export default class Home extends Component {
 
@@ -13,33 +14,39 @@ export default class Home extends Component {
 
   constructor(props) {
     super(props);
+
+    this.state = {
+      data: [],
+      refresh: true
+    };
+
+    this.refresh = this.refresh.bind(this);
   }
 
-  state = {
-    data: []
-  };
-
   selectItem(item) {
-    this.props.navigation.navigate('Details', item);
+    this.props.navigation.navigate('Details',item);
   };
 
   handleAdd(){
-    this.props.navigation.navigate('Novo');
+    this.props.navigation.navigate('New');
+  }
+
+  refresh(){
+    this.getList();
+    this.setState({ refresh: true});
   }
 
   componentDidMount(){
-    //this.getList();
+    this.refresh();
+    this.subs = [
+      this.props.navigation.addListener('willFocus', () => this.refresh()),
+    ]; 
   }
 
   async getList(){
+    const idUser = await AsyncStorage.getItem('@EasyList:id');
     try {
-        const token = await AsyncStorage.getItem('@EasyList:token');
-
-        const response = await Api.get('/list/user/1', {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
+        const response = await Api.get(`/list/user/${idUser}`);
 
         this.setState({ data: response.data });
     } catch(error){
@@ -54,7 +61,8 @@ export default class Home extends Component {
           <View style={Styles.listView}>
             <FlatList
               data={this.state.data}
-              keyExtractor={item => item.id}
+              extraData={this.state}
+              keyExtractor={item => `${item.id}`}
               renderItem={({ item }) => {
                 return (
                   <TouchableOpacity onPress={() => this.selectItem(item)}>

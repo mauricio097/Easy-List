@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { View, Text,TextInput, TouchableOpacity, AsyncStorage } from 'react-native';
+import { View, Text,TextInput, TouchableOpacity, AsyncStorage, Image } from 'react-native';
 import Styles from './styles';
 import Api from '../../services/api';
-
 
 export default class login extends Component {
 
@@ -23,16 +22,6 @@ export default class login extends Component {
         lists: []
     }
 
-
-    async componentDidMount(){
-        const token = await AsyncStorage.getItem('@EasyList:token');
-        const name  = await AsyncStorage.getItem('@EasyList:name');
-
-        if(token && name){
-            this.props.navigation.navigate('Home');
-        }
-    }
-
     handleEmailChange = (email) => {
         this.setState({inputEmail: email});
     }
@@ -51,14 +40,16 @@ export default class login extends Component {
                 email: this.state.inputEmail,
                 password: this.state.inputPassword
               });
+              
+            AsyncStorage.setItem('@EasyList:token',response.data.token);
+            AsyncStorage.setItem('@EasyList:name',response.data.name);
+            AsyncStorage.setItem('@EasyList:email',response.data.email);
+            AsyncStorage.setItem('@EasyList:id',response.data.id);
 
-              AsyncStorage.setItem('@EasyList:token',response.data.token);
-              AsyncStorage.setItem('@EasyList:name',response.data.name);
-        
-              this.props.navigation.navigate('Home');
+            this.props.navigation.navigate('Home');
             
             }catch(error){
-                this.setState({error: 'Usuário ou Senha Incorretos'});
+                this.setState({error: error});
             }
           }
     }
@@ -70,6 +61,7 @@ export default class login extends Component {
     render() {
         return (
             <View style={Styles.contentView}>
+            
                 <View style={Styles.formView} >
                     <TextInput style={Styles.input}
                         underlineColorAndroid="transparent"
@@ -98,3 +90,5 @@ export default class login extends Component {
         );
     }
 };
+
+//<Image source={require('../../images/logo.png')} />

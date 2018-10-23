@@ -7,31 +7,54 @@ import Edit from './pages/Edit';
 import Login from './pages/Login';
 import Register from './pages/Register';
 
-const HomeStack = createStackNavigator({
-  Home: Home,
-  Details: Details,
-  Edit
+
+export const SignedOutRoutes = createStackNavigator({
+  Login: {
+    screen: Login,
+    navigationOptions: {
+      header:null
+    }
+  },
 });
 
-const NewStack = createStackNavigator({
-  Novo: New
-});
-
-const LoginStack = createStackNavigator({
-  Login: Login
-});
-
-const RegisterStack = createStackNavigator({
-  Register: Register
-});
-
-
-
-export default StackNavigator = createStackNavigator(
-  {
-    Login: { screen: LoginStack, navigationOptions:{header: null}},
-    Register: { screen: RegisterStack, navigationOptions:{header: null}},
-    Início: { screen: HomeStack, navigationOptions:{header: null}},
-    Novo: { screen: NewStack, navigationOptions:{header: null}}
+export const SignedInRoutes = createStackNavigator({
+  Home: {
+    screen: Home,
+    navigationOptions: {
+      header:null
+    }
+  },
+  Details: {
+    screen: Details,
+    navigationOptions: {
+      header:null
+    }
+  },
+  Edit: {
+    screen: Edit,
+    navigationOptions: {
+      header:null
+    }
+  },
+  New: {
+    screen: New,
+    navigationOptions: {
+      header:null
+    }
   }
-);
+});
+
+export const createRootNavigator = (signedIn = false) => {
+  return createStackNavigator({
+    SignedIn: { screen: SignedInRoutes },
+    SignedOut: { screen: SignedOutRoutes }
+  },
+  {
+    headerMode: "none",
+    mode: "modal",
+    initialRouteName: signedIn ? "SignedIn" : "SignedOut",
+    navigationOptions: {
+      gesturesEnabled: false
+    }
+  });
+};

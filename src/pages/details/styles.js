@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import colors from '../../config/colors';
 
 const Styles = StyleSheet.create({
   leftComponentIcon: {
@@ -10,28 +11,61 @@ const Styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: 'bold'
   },
-  contentView: {
+  contentView:{
+    flex:1
+  },
+  listView: {
     marginTop: 10,
     marginHorizontal: 10,
+    backgroundColor: '#E7E7E7',
+    flex:0.95
   },
   itemListView: {
-    flexBasis: 0,
     alignItems: "center",
-    backgroundColor: "#FFF",
-    flexGrow: 1,
+    backgroundColor: '#FFF',
     margin: 4,
     padding: 20,
     borderRadius: 5,
     flexDirection: 'row',
   },
-  itemNameText: {
-    fontSize: 25,
-    flex: 1
-  },
   itemIconText: {
     fontSize: 25,
-    flex: 1
+    marginRight: 15
   },
+  inputName:{
+    backgroundColor: '#E7E7E7',
+    width: '30%',
+    height: 40,
+    marginRight: 20,
+    borderRadius: 5
+  },
+  inputPrice:{
+    backgroundColor: '#E7E7E7',
+    width: '20%',
+    height: 40,
+    marginRight: 20,
+    borderRadius: 5,
+    textAlign:'center'
+  },
+  inputQuantity:{
+    backgroundColor: '#E7E7E7',
+    width: '20%',
+    height: 40,
+    marginRight: 20,
+    borderRadius: 5,
+    textAlign:'center'
+  },
+  totalButtonView:{
+      backgroundColor: colors.background,
+      flex:0.05,
+      alignItems: 'center',
+      justifyContent: 'center'
+  },
+  buttonTotalText:{
+    color:'#FFF',
+    fontWeight: 'bold',
+    fontSize: 15
+  }
 });
 
 export default Styles;

@@ -10,7 +10,8 @@ export default class Edit extends Component {
     super(props);
 
     this.state = {
-      data: [],
+      name: '',
+      items: []
     };
   }
 
@@ -19,7 +20,8 @@ export default class Edit extends Component {
   };
 
   componentDidMount() {
-    this.setState({ data: this.props.navigation.state.params });
+    this.setState({ name: this.props.navigation.state.params[0],
+                    items: this.props.navigation.state.params[1]});
   }
 
   goBack() {
@@ -29,7 +31,7 @@ export default class Edit extends Component {
   render() {
     return (
       <View>
-        <Header title={this.state.data.name}
+        <Header title={this.state.name}
           leftComponent={
             <TouchableOpacity onPress={() => this.goBack()}>
               <FontAwesome style={Styles.leftComponentIcon}>{Icons.arrowLeft}</FontAwesome>
@@ -44,8 +46,8 @@ export default class Edit extends Component {
         />
         <View style={Styles.containerView}>
           <FlatList
-            data={this.state.data.items}
-            keyExtractor={item => item.id}
+            data={[this.state.items]}
+            keyExtractor={item => `${item.id}`}
             renderItem={({ item }) => {
               return (
                 <View style={Styles.itemListView}>

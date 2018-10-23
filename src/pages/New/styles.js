@@ -11,6 +11,15 @@ const Styles = StyleSheet.create({
         color: '#FFF',
         fontSize: 20,
     },
+    nameBarView:{
+        marginTop: 20,
+        marginHorizontal: 30,
+    },
+    nameBarInput:{
+        backgroundColor: '#FFF',
+        borderRadius:5,
+        height: 40
+    },
     addBarView:{
         marginTop: 20,
         marginHorizontal: 30,

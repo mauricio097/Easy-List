@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import { View, TextInput, FlatList, Text, TouchableOpacity } from 'react-native';
+import { View, TextInput, FlatList, Text, TouchableOpacity , AsyncStorage } from 'react-native';
 import Styles from './styles';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
 import Header from '../../components/Header';
+import Api from '../../services/api';
+import Home from '../Home';
 
 
 export default class New extends Component {
@@ -13,21 +15,42 @@ export default class New extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            Inputname: '',
-            data: [
-                { id: "00", name: "Café", price: 2.19, quantity: 3 },
-                { id: "01", name: "Açucar", price: 3.00, quantity: 2 },
-                { id: "03", name: "Arroz", price: 10.99, quantity: 3 },
-                { id: "04", name: "Feijão", price: 5.42, quantity: 1 }
-            ]
+            InputName: '',
+            InputItem: '',
+            items: [],
+            error:''
         }
     }
 
     insertItem() {
-        let data = this.state.data;
-        let newItem = { id: "05", name: this.state.Inputname, price: 2.19, quantity: 3 };
-        data.push(newItem);
-        this.setState({ data });
+        let items = this.state.items;
+        if(this.state.InputItem.length > 0){
+            let newItem = { id: `${this.state.items.length}`, name: this.state.InputItem, price: "0.00", quantity: "0" };
+            items.push(newItem);
+            this.setState({ items });
+            this.setState({ InputItem: ''});
+            this.inputItem.clear();
+        }
+        else{
+            this.setState({ error: 'Nome da Lista não pode ser Vazio'});
+        }
+    }
+
+    async createList(){
+        try{
+            const response = await Api.post('/list', {
+                idUser: await AsyncStorage.getItem('@EasyList:id'),
+                name: this.state.InputName,
+                items: this.state.items
+            });
+            
+            this.props.navigation.navigate('Home');
+            }
+            catch(error){
+                alert(error);
+                this.setState({error: 'Erro ao Criar Lista'});
+            }
+        
     }
 
     render() {
@@ -41,16 +64,25 @@ export default class New extends Component {
                     }
 
                     rightComponent={
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={() => this.createList()}>
                             <Text style={Styles.rightComponentText}>Criar</Text>
                         </TouchableOpacity>
                     }
                 />
+                <View style={Styles.nameBarView}>
+                    <TextInput style={Styles.nameBarInput}                            
+                            underlineColorAndroid="transparent"
+                            placeholder="Nome da Lista"
+                            onChangeText={(text) => this.setState({ InputName: text })}
+                    />
+                </View>
 
                 <View style={Styles.addBarView}>
                     <TextInput style={Styles.addBarInput}
+                        ref={input => { this.inputItem = input }}
                         underlineColorAndroid="transparent"
-                        onChangeText={(text) => this.setState({ Inputname: text })}
+                        placeholder="Nome do Item"
+                        onChangeText={(text) => this.setState({ InputItem: text })}
                     />
                     <TouchableOpacity onPress={() => this.insertItem()}>
                         <FontAwesome style={Styles.addBarButton}>{Icons.plusSquare}</FontAwesome>
@@ -59,7 +91,7 @@ export default class New extends Component {
 
                 <View style={Styles.containerView}>
                     <FlatList
-                        data={this.state.data}
+                        data={this.state.items}
                         extraData={this.state}
                         showsVerticalScrollIndicator={false}
                         renderItem={({ item }) =>

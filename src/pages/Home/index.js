@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { View, Text, FlatList, TouchableOpacity, AsyncStorage, Alert } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, AsyncStorage, Alert, NetInfo } from 'react-native';
 import Styles from './styles';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
 import Header from '../../components/Header';
 import Api from '../../services/api';
-import { NavigationEvents } from 'react-navigation';
+import InternetConnectivity from '../../utils/internetConnection';
 
 export default class Home extends Component {
 
@@ -17,7 +17,8 @@ export default class Home extends Component {
 
     this.state = {
       data: [],
-      refresh: true
+      refresh: true,
+      status: null
     };
 
     this.refresh = this.refresh.bind(this);
@@ -32,8 +33,8 @@ export default class Home extends Component {
   }
 
   refresh(){
-    this.getList();
-    this.setState({ refresh: true});
+    //this.getList();
+    //this.setState({ refresh: true});
   }
 
   componentDidMount(){
@@ -41,6 +42,11 @@ export default class Home extends Component {
     this.subs = [
       this.props.navigation.addListener('willFocus', () => this.refresh()),
     ]; 
+
+    NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectionChange);
+    NetInfo.isConnected.fetch().done(
+      (isConnected) => { this.setState({ status: isConnected });}
+    );
   }
 
   async removeItem(id){
@@ -78,6 +84,14 @@ export default class Home extends Component {
     }
   };
 
+  componentWillUnmount() {
+    NetInfo.isConnected.removeEventListener('connectionChange', this.handleConnectionChange);
+  }
+
+  handleConnectionChange = (isConnected) => {
+    this.setState({ status: isConnected });
+  }
+
   render() {
     return (
       <View style={Styles.contentView}>
@@ -89,7 +103,7 @@ export default class Home extends Component {
               keyExtractor={item => `${item.id}`}
               renderItem={({ item }) => {
                 return (                    
-                    <TouchableOpacity onPress={() => this.selectItem(item)}>                    
+                    <TouchableOpacity onPress={() => this.selectItem(item)}>           
                       <View style={Styles.itemListView}> 
                       <TouchableOpacity onPress={() => this.confirmationRemoveItem(item)}>
                         <FontAwesome style={Styles.minusBarButton}>{Icons.minusSquare}</FontAwesome>

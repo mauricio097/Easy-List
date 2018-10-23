@@ -3,6 +3,7 @@ import { View, Text, FlatList, TouchableOpacity, TextInput } from 'react-native'
 import Styles from './styles';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
 import Header from '../../components/Header';
+import Api from '../../services/api';
 
 export default class Details extends Component {
 
@@ -12,6 +13,7 @@ export default class Details extends Component {
     this.state = {
       editable: true,
       name: '',
+      id: null,
       items: [],
       total: 0
     };
@@ -24,20 +26,66 @@ export default class Details extends Component {
   componentDidMount() {
     this.setState({
       items: this.props.navigation.state.params.items,
-      name: this.props.navigation.state.params.name
+      name: this.props.navigation.state.params.name,
+      id: this.props.navigation.state.params.id
     });
 
-    this.calculateTotal();
+    this.calculateTotal(this.props.navigation.state.params.items);
   }
 
-  calculateTotal(){
-    this.state.items.map((data) => { 
-      alert('terte');
-    });
+  calculateTotal(items){
+    let total = 0;
+    for (i in items) {
+      total += items[i].price * items[i].quantity;
+    }
+    let totalFloat = parseFloat(total.toFixed(2));
+    this.setState({total : totalFloat});
   }
 
-  editData() {
-    //this.props.navigation.navigate('Edit',[this.state.name,this.state.items]);
+  async saveData() {
+    let id = this.state.id;
+    try{
+      const response = await Api.put(`/list/${id}`, {
+          name: this.state.name,
+          items: this.state.items
+      });
+      
+      this.props.navigation.navigate('Home');
+      }
+      catch(error){
+          alert(error);
+          this.setState({error: 'Erro ao Atualizar Lista'});
+      }
+  }
+
+  updateName(text,itemName){
+    let items = this.state.items;
+    for (i in items) {
+      if(items[i].name === itemName){
+         items[i].name = text;
+      }
+    }
+    this.setState(items);
+  }
+
+  updatePrice(text,itemPrice){
+    let items = this.state.items;
+    for (i in items) {
+      if(items[i].price === itemPrice){
+         items[i].price = text;
+      }
+    }
+    this.setState(items);
+  }
+
+  updateQuantity(text,itemQuantity){
+    let items = this.state.items;
+    for (i in items) {
+      if(items[i].quantity === itemQuantity){
+         items[i].quantity = text;
+      }
+    }
+    this.setState(items);
   }
 
   goBack() {
@@ -55,7 +103,7 @@ export default class Details extends Component {
           }
 
           rightComponent={
-            <TouchableOpacity onPress={() => this.editData()}>
+            <TouchableOpacity onPress={() => this.saveData()}>
               <Text style={Styles.rightComponentText}>Salvar</Text>
             </TouchableOpacity>}
         />
@@ -69,6 +117,7 @@ export default class Details extends Component {
                   <TextInput
                     underlineColorAndroid="transparent"
                     placeholder={item.name}
+                    onChangeText={(text) => this.updateName(text,item.name)}
                     style={Styles.inputName}
                   />
                   <Text style={Styles.itemIconText} >
@@ -78,6 +127,7 @@ export default class Details extends Component {
                     placeholder={item.price}
                     underlineColorAndroid="transparent"
                     keyboardType='numeric'
+                    onChangeText={(text) => this.updatePrice(text,item.price)}
                     style={Styles.inputPrice}
                   />
                   <Text style={Styles.itemIconText}>
@@ -86,6 +136,7 @@ export default class Details extends Component {
                   <TextInput
                     placeholder={item.quantity}
                     underlineColorAndroid="transparent"
+                    onChangeText={(text) => this.updateQuantity(text,item.quantity)}
                     keyboardType='numeric'
                     style={Styles.inputQuantity}
                   />

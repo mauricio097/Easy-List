@@ -57,14 +57,14 @@ const Styles = StyleSheet.create({
   },
   totalButtonView:{
       backgroundColor: colors.background,
-      flex:0.05,
+      flex:0.07,
       alignItems: 'center',
       justifyContent: 'center'
   },
   buttonTotalText:{
     color:'#FFF',
     fontWeight: 'bold',
-    fontSize: 15
+    fontSize: 20
   }
 });
 

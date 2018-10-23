@@ -15,6 +15,12 @@ export const SignedOutRoutes = createStackNavigator({
       header:null
     }
   },
+  Register: {
+    screen: Register,
+    navigationOptions: {
+      header:null
+    }
+  },
 });
 
 export const SignedInRoutes = createStackNavigator({

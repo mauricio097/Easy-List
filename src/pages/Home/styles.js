@@ -21,7 +21,8 @@ const Styles = StyleSheet.create({
     },
     itemListText: {
         flex: 1,
-        fontSize: 20
+        fontSize: 20,
+        marginLeft: 10
     },
     itemListIcon: {
         fontSize: 30
@@ -42,7 +43,11 @@ const Styles = StyleSheet.create({
     buttonAdd:{
         marginHorizontal:20,
         marginBottom:20
-    }
+    },
+    minusBarButton:{
+        fontSize: 28, 
+        color: '#ba2727'
+    },
 });
 
 export default Styles;

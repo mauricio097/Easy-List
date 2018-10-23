@@ -37,6 +37,11 @@ const Styles = StyleSheet.create({
         marginLeft: 10, 
         color: Colors.button
     },
+    minusBarButton:{
+        fontSize: 35, 
+        marginLeft: 10, 
+        color: '#ba2727'
+    },
     listItemView:{
         flexBasis: 0,
         alignItems: "center",

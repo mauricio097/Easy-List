@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, FlatList, TouchableOpacity, AsyncStorage } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, AsyncStorage, Alert } from 'react-native';
 import Styles from './styles';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
 import Header from '../../components/Header';
@@ -43,6 +43,30 @@ export default class Home extends Component {
     ]; 
   }
 
+  async removeItem(id){
+    try{
+        const response = await Api.delete(`/list/${id}`);
+        this.refresh();
+      }
+      catch(error){
+          alert(error);
+          this.setState({error: 'Erro ao Deletar Lista'});
+      }
+  }
+
+  confirmationRemoveItem(item){
+    let title = item.name;
+    Alert.alert(
+      title,
+      'Deseja remover esse Item? ',
+      [
+        {text: 'Não', style: 'cancel'},
+        {text: 'Sim', onPress: () => this.removeItem(item.id) },
+      ],
+      { cancelable: false }
+    )
+  }
+
   async getList(){
     const idUser = await AsyncStorage.getItem('@EasyList:id');
     try {
@@ -64,15 +88,18 @@ export default class Home extends Component {
               extraData={this.state}
               keyExtractor={item => `${item.id}`}
               renderItem={({ item }) => {
-                return (
-                  <TouchableOpacity onPress={() => this.selectItem(item)}>
-                    <View style={Styles.itemListView}>
-                      <Text style={Styles.itemListText}>{item.name}</Text>
-                      <Text style={Styles.itemListIcon}>
-                        <FontAwesome>{Icons.angleRight}</FontAwesome>
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
+                return (                    
+                    <TouchableOpacity onPress={() => this.selectItem(item)}>                    
+                      <View style={Styles.itemListView}> 
+                      <TouchableOpacity onPress={() => this.confirmationRemoveItem(item)}>
+                        <FontAwesome style={Styles.minusBarButton}>{Icons.minusSquare}</FontAwesome>
+                      </TouchableOpacity>                   
+                        <Text style={Styles.itemListText}>{item.name}</Text>
+                        <Text style={Styles.itemListIcon}>
+                          <FontAwesome>{Icons.angleRight}</FontAwesome>
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
                 );
               }}
             />

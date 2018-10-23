@@ -68,25 +68,36 @@ export default class Details extends Component {
     this.setState(items);
   }
 
-  updatePrice(text,itemPrice){
+  updatePrice(text,itemName){
     let items = this.state.items;
     for (i in items) {
-      if(items[i].price === itemPrice){
+      if(items[i].name === itemName){
          items[i].price = text;
       }
     }
     this.setState(items);
   }
 
-  updateQuantity(text,itemQuantity){
+  updateQuantity(text,itemName){
     let items = this.state.items;
     for (i in items) {
-      if(items[i].quantity === itemQuantity){
+      if(items[i].name === itemName){
          items[i].quantity = text;
       }
     }
     this.setState(items);
   }
+
+  removeItem(item){
+    let items = this.state.items;
+    for (i in items) {
+        if(items[i].name === item.name){
+            items.splice(i, 1);
+        }
+    }
+
+    this.setState({items});
+}
 
   goBack() {
     this.props.navigation.navigate('Home');
@@ -127,7 +138,7 @@ export default class Details extends Component {
                     placeholder={item.price}
                     underlineColorAndroid="transparent"
                     keyboardType='numeric'
-                    onChangeText={(text) => this.updatePrice(text,item.price)}
+                    onChangeText={(text) => this.updatePrice(text,item.name)}
                     style={Styles.inputPrice}
                   />
                   <Text style={Styles.itemIconText}>
@@ -136,10 +147,13 @@ export default class Details extends Component {
                   <TextInput
                     placeholder={item.quantity}
                     underlineColorAndroid="transparent"
-                    onChangeText={(text) => this.updateQuantity(text,item.quantity)}
+                    onChangeText={(text) => this.updateQuantity(text,item.name)}
                     keyboardType='numeric'
                     style={Styles.inputQuantity}
                   />
+                  <TouchableOpacity onPress={() => this.removeItem(item)}>
+                      <FontAwesome style={Styles.minusBarButton}>{Icons.minusSquare}</FontAwesome>
+                  </TouchableOpacity>
                 </View>
               );
             }}

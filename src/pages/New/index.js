@@ -18,7 +18,8 @@ export default class New extends Component {
             InputName: '',
             InputItem: '',
             items: [],
-            error:''
+            error:'',
+            reload:true
         }
     }
 
@@ -34,6 +35,17 @@ export default class New extends Component {
         else{
             this.setState({ error: 'Nome da Lista não pode ser Vazio'});
         }
+    }
+
+    removeItem(item){
+        let items = this.state.items;
+        for (i in items) {
+            if(items[i].name === item.name){
+                items.splice(i, 1);
+            }
+        }
+
+        this.setState({items});
     }
 
     async createList(){
@@ -97,6 +109,9 @@ export default class New extends Component {
                         renderItem={({ item }) =>
                             <View style={Styles.listItemView}>
                                 <Text style={Styles.listItemText}>{item.name}</Text>
+                                <TouchableOpacity onPress={() => this.removeItem(item)}>
+                                    <FontAwesome style={Styles.minusBarButton}>{Icons.minusSquare}</FontAwesome>
+                                </TouchableOpacity>
                             </View>
                         }
                         keyExtractor={item => item.id}

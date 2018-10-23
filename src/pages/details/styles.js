@@ -32,9 +32,13 @@ const Styles = StyleSheet.create({
     fontSize: 25,
     marginRight: 15
   },
+  minusBarButton:{
+      fontSize: 25, 
+      color: '#ba2727'
+  },
   inputName:{
     backgroundColor: '#E7E7E7',
-    width: '30%',
+    width: '25%',
     height: 40,
     marginRight: 20,
     borderRadius: 5

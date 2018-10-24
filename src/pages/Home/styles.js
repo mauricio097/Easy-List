@@ -48,6 +48,11 @@ const Styles = StyleSheet.create({
         fontSize: 28, 
         color: '#ba2727'
     },
+    rightComponentText: {
+        color: '#FFF',
+        fontSize: 15,
+        fontWeight: 'bold'
+      },
 });
 
 export default Styles;

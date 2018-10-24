@@ -58,6 +58,7 @@ export default class register extends Component {
     render() {
         return (
             <View style={Styles.contentView}>
+            <Image source={require('../../images/logo.png')} style={Styles.logo} />
                 <View style={Styles.formView} >
                     <TextInput style={Styles.input}
                         underlineColorAndroid="transparent"

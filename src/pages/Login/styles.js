@@ -7,8 +7,10 @@ const Styles = StyleSheet.create({
         flex: 1
     },
     logo: {
-        width: '60%',
-        height: '60%'
+        width: '75%',
+        height: '38%',
+        marginBottom: 15,
+        marginTop: 15
     },
     formView: {
         marginTop: 15

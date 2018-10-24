@@ -6,7 +6,6 @@ import Header from '../../components/Header';
 import Api from '../../services/api';
 import Home from '../Home';
 
-
 export default class New extends Component {
     static navigationOptions = {
         header: null
@@ -62,7 +61,6 @@ export default class New extends Component {
                 alert(error);
                 this.setState({error: 'Erro ao Criar Lista'});
             }
-        
     }
 
     render() {

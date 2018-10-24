@@ -40,12 +40,14 @@ export default class login extends Component {
                 email: this.state.inputEmail,
                 password: this.state.inputPassword
               });
-              
+            
             AsyncStorage.setItem('@EasyList:token',response.data.token);
             AsyncStorage.setItem('@EasyList:name',response.data.name);
             AsyncStorage.setItem('@EasyList:email',response.data.email);
-            AsyncStorage.setItem('@EasyList:id',response.data.id);
+            AsyncStorage.setItem('@EasyList:id',`${response.data.id}`);
 
+            this.inputItem.clear();
+    
             this.props.navigation.navigate('Home');
             
             }catch(error){
@@ -61,7 +63,7 @@ export default class login extends Component {
     render() {
         return (
             <View style={Styles.contentView}>
-            
+                <Image source={require('../../images/logo.png')} style={Styles.logo} />
                 <View style={Styles.formView} >
                     <TextInput style={Styles.input}
                         underlineColorAndroid="transparent"
@@ -71,6 +73,7 @@ export default class login extends Component {
                         autoCorrect={false}                        
                     />
                     <TextInput style={Styles.input}
+                        ref={input => { this.inputItem = input }}
                         underlineColorAndroid="transparent"
                         placeholder='Senha'
                         onChangeText={this.handlePasswordChange}

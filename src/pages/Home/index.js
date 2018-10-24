@@ -4,6 +4,7 @@ import Styles from './styles';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
 import Header from '../../components/Header';
 import Api from '../../services/api';
+import storage from '../../services/storage';
 
 export default class Home extends Component {
 
@@ -17,10 +18,14 @@ export default class Home extends Component {
     this.state = {
       data: [],
       refresh: true,
-      status: null
+      status: false
     };
 
     this.refresh = this.refresh.bind(this);
+
+    NetInfo.isConnected.addEventListener('connectionChange', ( res ) => {
+      this.setState( { status: res });
+    });
   }
 
   selectItem(item) {
@@ -43,18 +48,25 @@ export default class Home extends Component {
   }
 
   async removeItem(id) {
-    try {
+     storage.remove({
+        key: 'list',
+        id: id
+      });
+      this.refresh();
+
+    /*try {
       const response = await Api.delete(`/list/${id}`);
       this.refresh();
     }
     catch (error) {
       alert(error);
       this.setState({ error: 'Erro ao Deletar Lista' });
-    }
+    }*/
   }
 
   logout(){
     AsyncStorage.clear();
+    storage.clearMap();
     this.props.navigation.navigate('Login');
   }
 
@@ -72,15 +84,20 @@ export default class Home extends Component {
   }
 
   async getList() {
-      const idUser = await AsyncStorage.getItem('@EasyList:id');
-      try{
-        const response = await Api.get(`/list/user/${idUser}`);
+      storage.getAllDataForKey('list').then(lists => {
+        this.setState({ data: lists });
+      });
 
-        this.setState({ data: response.data });
+      
+      /*const idUser = await AsyncStorage.getItem('@EasyList:id');
+        try{
+          const response = await Api.get(`/list/user/${idUser}`);
 
-      }catch(error){
-        alert(error);
-      }
+          this.setState({ data: response.data });
+
+        }catch(error){
+          alert(error);
+        }*/
   };
 
   render() {

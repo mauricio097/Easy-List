@@ -12,16 +12,20 @@ export default class App extends React.Component {
   };
 
   componentWillMount() {
-    this.isLogged();
+    if(this.isLogged()){
+      this.setState({logged: true});
+    }
+    else{
+      this.setState({logged: false});
+    }
   }
 
   async isLogged(){
-    //await AsyncStorage.removeItem('@EasyList:token');
     const token = await AsyncStorage.getItem('@EasyList:token');
     if(token){
-      this.setState({logged: true});
+      return true;
     }else{
-      this.setState({logged: false});
+      return false;
     }
   }
 

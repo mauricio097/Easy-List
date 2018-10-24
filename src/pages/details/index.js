@@ -12,8 +12,8 @@ export default class Details extends Component {
 
     this.state = {
       editable: true,
-      name: '',
       id: null,
+      name: '',
       items: [],
       total: 0
     };
@@ -24,6 +24,7 @@ export default class Details extends Component {
   };
 
   componentDidMount() {
+    
     this.setState({
       items: this.props.navigation.state.params.items,
       name: this.props.navigation.state.params.name,
@@ -43,8 +44,22 @@ export default class Details extends Component {
   }
 
   async saveData() {
-    let id = this.state.id;
-    try{
+
+    let data = { 
+      id: this.state.id,
+      name: this.state.name,
+      items: this.state.items
+    }
+
+    storage.save({
+        key:'list',
+        id: this.state.id,
+        data: data,
+        expires: null
+    })
+
+    this.props.navigation.navigate('Home');
+    /*try{
       const response = await Api.put(`/list/${id}`, {
           name: this.state.name,
           items: this.state.items
@@ -55,7 +70,7 @@ export default class Details extends Component {
       catch(error){
           alert(error);
           this.setState({error: 'Erro ao Atualizar Lista'});
-      }
+      }*/
   }
 
   updateName(text,itemName){

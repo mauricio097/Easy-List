@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { View, TextInput, FlatList, Text, TouchableOpacity , AsyncStorage } from 'react-native';
+import { View, TextInput, FlatList, Text, TouchableOpacity , AsyncStorage , NetInfo } from 'react-native';
 import Styles from './styles';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
 import Header from '../../components/Header';
 import Api from '../../services/api';
 import Home from '../Home';
+import store from 'react-native-simple-store';
 
 export default class New extends Component {
     static navigationOptions = {
@@ -18,8 +19,14 @@ export default class New extends Component {
             InputItem: '',
             items: [],
             error:'',
-            reload:true
+            reload:true,
+            status: false,
+            id: null
         }
+
+        NetInfo.isConnected.addEventListener('connectionChange', ( res ) => {
+            this.setState( { status: res });
+        });
     }
 
     insertItem() {
@@ -48,7 +55,28 @@ export default class New extends Component {
     }
 
     async createList(){
-        try{
+
+        const id = await storage.getIdsForKey('list').then(ids => {
+            return ids.length+1;
+        });
+
+        let newList = {
+            id: id,
+            name: this.state.InputName,
+            items: this.state.items
+        }
+
+        storage.save({
+            key:'list',
+            id: id,
+            data: newList,
+            expires: null
+        })
+
+        this.props.navigation.navigate('Home');
+
+       /* if(this.state.status){
+            try{
             const response = await Api.post('/list', {
                 idUser: await AsyncStorage.getItem('@EasyList:id'),
                 name: this.state.InputName,
@@ -61,6 +89,7 @@ export default class New extends Component {
                 alert(error);
                 this.setState({error: 'Erro ao Criar Lista'});
             }
+        }*/
     }
 
     render() {

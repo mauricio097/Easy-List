@@ -6,10 +6,9 @@ const Styles = StyleSheet.create({
     color: '#FFF',
     fontSize: 20,
   },
-  rightComponentText: {
+  rightComponentIcon: {
     color: '#FFF',
-    fontSize: 15,
-    fontWeight: 'bold'
+    fontSize: 20,
   },
   contentView:{
     flex:1

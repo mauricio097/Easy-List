@@ -5,6 +5,8 @@ import FontAwesome, { Icons } from 'react-native-fontawesome';
 import Header from '../../components/Header';
 import Api from '../../services/api';
 import storage from '../../services/storage';
+//import Sync from '../../services/sync';
+
 
 export default class Home extends Component {
 
@@ -23,8 +25,18 @@ export default class Home extends Component {
 
     this.refresh = this.refresh.bind(this);
 
-    NetInfo.isConnected.addEventListener('connectionChange', ( res ) => {
-      this.setState( { status: res });
+    NetInfo.isConnected.fetch().done((isConnected) => {
+      this.setState({ status: isConnected });
+
+      //if(this.state.status)
+      //Sync.sync();
+    });
+
+    NetInfo.isConnected.addEventListener('connectionChange', (res) => {
+      this.setState({ status: res });
+
+      //if(this.state.status)
+      //Sync.sync();
     });
   }
 
@@ -38,21 +50,21 @@ export default class Home extends Component {
 
   refresh() {
     this.getList();
-    this.setState({ refresh: true});
+    this.setState({ refresh: true });
   }
 
   componentDidMount() {
     this.subs = [
       this.props.navigation.addListener('willFocus', () => this.refresh()),
-    ];  
+    ];
   }
 
-  async removeItem(id) {
-     storage.remove({
-        key: 'list',
-        id: id
-      });
-      this.refresh();
+  removeItem(id) {
+    storage.remove({
+      key: 'list',
+      id: id
+    });
+    this.refresh();
 
     /*try {
       const response = await Api.delete(`/list/${id}`);
@@ -64,7 +76,7 @@ export default class Home extends Component {
     }*/
   }
 
-  logout(){
+  logout() {
     AsyncStorage.clear();
     storage.clearMap();
     this.props.navigation.navigate('Login');
@@ -83,30 +95,25 @@ export default class Home extends Component {
     )
   }
 
-  async getList() {
-      storage.getAllDataForKey('list').then(lists => {
-        this.setState({ data: lists });
-      });
-
-      
-      /*const idUser = await AsyncStorage.getItem('@EasyList:id');
-        try{
-          const response = await Api.get(`/list/user/${idUser}`);
-
-          this.setState({ data: response.data });
-
-        }catch(error){
-          alert(error);
-        }*/
+  getList() {
+    storage.getAllDataForKey('list').then(lists => {
+      this.setState({ data: lists });
+    });
   };
 
   render() {
     return (
       <View style={Styles.contentView}>
-        <Header title='EasyList' 
+        <Header title='EasyList'
           leftComponent={
             <TouchableOpacity onPress={() => this.logout()}>
-              <Text style={Styles.rightComponentText}>Sair</Text>
+              <FontAwesome style={Styles.leftComponentIcon}>{Icons.signOut}</FontAwesome>              
+            </TouchableOpacity>
+          }
+
+          rightComponent={
+            <TouchableOpacity onPress={() => this.handleAdd()}>
+              <FontAwesome style={Styles.rightComponentIcon}>{Icons.plus}</FontAwesome>              
             </TouchableOpacity>
           }
         />
@@ -132,20 +139,7 @@ export default class Home extends Component {
             }}
           />
         </View>
-        <View style={Styles.addButtonView}>
-          <TouchableOpacity style={Styles.buttonAdd} onPress={() => this.handleAdd()}>
-            <Text style={Styles.buttonNewText}>
-              <FontAwesome>{Icons.plus}</FontAwesome>
-            </Text>
-          </TouchableOpacity>
-        </View>
       </View>
     );
   }
 }
-
-/*store.save(key, value);
-store.update(key, value);
-store.get(key);
-store.push(key, value);
-store.delete(key);*/

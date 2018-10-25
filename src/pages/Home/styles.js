@@ -27,32 +27,20 @@ const Styles = StyleSheet.create({
     itemListIcon: {
         fontSize: 30
     },
-    buttonNewText:{
-       backgroundColor: Colors.button,
-       width: 60,
-       height: 60,
-       textAlign: 'center',
-       textAlignVertical: 'center',
-       borderRadius: 30,
-       fontSize: 35,
-       color:"#FFF"
-    },
-    addButtonView:{
-        alignItems:'flex-end'
-    },
-    buttonAdd:{
-        marginHorizontal:20,
-        marginBottom:20
-    },
     minusBarButton:{
         fontSize: 28, 
         color: '#ba2727'
     },
-    rightComponentText: {
+    leftComponentIcon: {
         color: '#FFF',
-        fontSize: 15,
-        fontWeight: 'bold'
-      },
+        fontSize: 25,
+        marginLeft:8
+    },
+    rightComponentIcon:{
+        color: '#FFF',
+        fontSize: 25,
+        
+    }
 });
 
 export default Styles;

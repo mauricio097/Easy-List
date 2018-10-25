@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { View, Text, FlatList, TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, TextInput, NetInfo} from 'react-native';
 import Styles from './styles';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
 import Header from '../../components/Header';
 import Api from '../../services/api';
+import sync from '../../services/sync';
 
 export default class Details extends Component {
 
@@ -15,8 +16,17 @@ export default class Details extends Component {
       id: null,
       name: '',
       items: [],
+      status: false,
       total: 0
     };
+
+    NetInfo.isConnected.fetch().done((isConnected) => {
+      this.setState( { status: isConnected });
+    });
+
+    NetInfo.isConnected.addEventListener('connectionChange', ( res ) => {
+      this.setState( { status: res });         
+    });
   }
 
   static navigationOptions = {
@@ -37,13 +47,18 @@ export default class Details extends Component {
   calculateTotal(items){
     let total = 0;
     for (i in items) {
+      items[i].price = items[i].price.replace(',','.');
       total += items[i].price * items[i].quantity;
     }
-    let totalFloat = parseFloat(total.toFixed(2));
+    let totalFloat = total.toString().replace('.',',');
     this.setState({total : totalFloat});
   }
 
   async saveData() {
+
+    const id = await storage.getIdsForKey('list').then(ids => {
+      return ids.length+1;
+    });
 
     let data = { 
       id: this.state.id,
@@ -58,19 +73,46 @@ export default class Details extends Component {
         expires: null
     })
 
-    this.props.navigation.navigate('Home');
-    /*try{
-      const response = await Api.put(`/list/${id}`, {
+    
+
+    /*if(this.state.status){
+      try{
+        const response = await Api.put(`/list/${this.state.id}`, {
+            name: this.state.name,
+            items: this.state.items
+        });
+        
+        this.props.navigation.navigate('Home');
+        }
+        catch(error){
+            alert(error);
+            this.setState({error: 'Erro ao Atualizar Lista'});
+        }
+    }
+    else{
+      let item = {
+        method: 'put',
+        url: `/list/${this.state.id}`,
+        body: {
           name: this.state.name,
           items: this.state.items
-      });
-      
-      this.props.navigation.navigate('Home');
+        }
+      };
+
+      try{
+        storage.save({
+          key:'sync',
+          id: id,
+          data: item,
+          expires: null
+        })
       }
       catch(error){
-          alert(error);
-          this.setState({error: 'Erro ao Atualizar Lista'});
-      }*/
+        this.setState({error: 'Erro ao Atualizar Lista Local'});
+      }
+    }*/
+
+    this.props.navigation.navigate('Home');
   }
 
   updateName(text,itemName){
@@ -118,6 +160,16 @@ export default class Details extends Component {
     this.props.navigation.navigate('Home');
   }
 
+  formatTotal(n){
+    let valor = parseInt( n.replace(/[\D]+/g,''));
+    var tmp = valor+'';
+    tmp = tmp.replace(/([0-9]{2})$/g, ",$1");
+        if( tmp.length > 6 )
+                tmp = tmp.replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
+
+    return tmp;
+  }
+
   render() {
     return (
       <View style={Styles.contentView}>
@@ -130,7 +182,7 @@ export default class Details extends Component {
 
           rightComponent={
             <TouchableOpacity onPress={() => this.saveData()}>
-              <Text style={Styles.rightComponentText}>Salvar</Text>
+              <FontAwesome style={Styles.rightComponentIcon}>{Icons.save} </FontAwesome>
             </TouchableOpacity>}
         />
         <View style={Styles.listView}>

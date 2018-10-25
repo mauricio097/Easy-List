@@ -4,8 +4,7 @@ import Styles from './styles';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
 import Header from '../../components/Header';
 import Api from '../../services/api';
-import Home from '../Home';
-import store from 'react-native-simple-store';
+import sync from '../../services/sync';
 
 export default class New extends Component {
     static navigationOptions = {
@@ -24,8 +23,12 @@ export default class New extends Component {
             id: null
         }
 
+        NetInfo.isConnected.fetch().done((isConnected) => {
+            this.setState( { status: isConnected });
+        });
+
         NetInfo.isConnected.addEventListener('connectionChange', ( res ) => {
-            this.setState( { status: res });
+            this.setState( { status: res });         
         });
     }
 
@@ -56,7 +59,7 @@ export default class New extends Component {
 
     async createList(){
 
-        const id = await storage.getIdsForKey('list').then(ids => {
+        const id = await  storage.getIdsForKey('list').then(ids => {
             return ids.length+1;
         });
 
@@ -73,9 +76,7 @@ export default class New extends Component {
             expires: null
         })
 
-        this.props.navigation.navigate('Home');
-
-       /* if(this.state.status){
+       /*if(this.state.status){
             try{
             const response = await Api.post('/list', {
                 idUser: await AsyncStorage.getItem('@EasyList:id'),
@@ -83,13 +84,39 @@ export default class New extends Component {
                 items: this.state.items
             });
             
-            this.props.navigation.navigate('Home');
+            
             }
-            catch(error){
-                alert(error);
+            catch(error){            
                 this.setState({error: 'Erro ao Criar Lista'});
             }
-        }*/
+        }else{
+            let item = {
+                method: 'post',
+                url: '/list',
+                body: {
+                    idUser:  AsyncStorage.getItem('@EasyList:id'),
+                    name: this.state.InputName,
+                    items: this.state.items
+                }
+            };
+
+            storage.save({
+                key:'sync',
+                id: id,
+                data: item,
+                expires: null
+            })
+
+            /*storage.getIdsForKey('sync').then(ids => {
+                alert(JSON.stringify(ids));
+            });*/
+            
+
+            //Sync.addItem(item);
+            //Sync.showItems();
+    
+
+        this.props.navigation.navigate('Home');
     }
 
     render() {
@@ -104,7 +131,7 @@ export default class New extends Component {
 
                     rightComponent={
                         <TouchableOpacity onPress={() => this.createList()}>
-                            <Text style={Styles.rightComponentText}>Criar</Text>
+                            <FontAwesome style={Styles.rightComponentIcon}>{Icons.check} </FontAwesome>
                         </TouchableOpacity>
                     }
                 />

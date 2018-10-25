@@ -2,10 +2,9 @@ import {StyleSheet} from 'react-native';
 import Colors from '../../config/colors';
 
 const Styles = StyleSheet.create({
-    rightComponentText: {
+    rightComponentIcon:{
         color: '#FFF',
-        fontSize: 16,
-        fontWeight: 'bold'
+        fontSize: 20,
     },
     leftComponentIcon:{
         color: '#FFF',

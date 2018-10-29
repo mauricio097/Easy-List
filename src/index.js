@@ -1,6 +1,6 @@
 import React from 'react';
 import './config/StatusBarConfig';
-import { createRootNavigator } from './routes';
+import { createRootNavigator, createMenuNavigator } from './routes';
 import { YellowBox, AsyncStorage } from 'react-native';
 import Api from './services/api';
 

@@ -50,12 +50,13 @@ export default class Details extends Component {
       items[i].price = items[i].price.replace(',','.');
       total += items[i].price * items[i].quantity;
     }
-    let totalFloat = total.toString().replace('.',',');
+    let float = parseFloat(total.toFixed(2));
+    let totalFloat = float.toString().replace('.',',');
     this.setState({total : totalFloat});
   }
 
   async saveData() {
-
+    
     const id = await storage.getIdsForKey('list').then(ids => {
       return ids.length+1;
     });
@@ -72,10 +73,21 @@ export default class Details extends Component {
         data: data,
         expires: null
     })
+    // Verify if device is not connected
+    if(!this.state.status){
+      //Add Request in queue
+      const updateItem = {
+          id: this.state.id,          
+          name: this.state.InputName,
+          items: this.state.items
+      }
 
-    
+      sync.updateItem(updateItem);
 
-    /*if(this.state.status){
+      this.props.navigation.navigate('Home');
+    }
+    else{
+      //Insert in API
       try{
         const response = await Api.put(`/list/${this.state.id}`, {
             name: this.state.name,
@@ -83,36 +95,13 @@ export default class Details extends Component {
         });
         
         this.props.navigation.navigate('Home');
-        }
-        catch(error){
-            alert(error);
-            this.setState({error: 'Erro ao Atualizar Lista'});
-        }
-    }
-    else{
-      let item = {
-        method: 'put',
-        url: `/list/${this.state.id}`,
-        body: {
-          name: this.state.name,
-          items: this.state.items
-        }
-      };
-
-      try{
-        storage.save({
-          key:'sync',
-          id: id,
-          data: item,
-          expires: null
-        })
       }
       catch(error){
-        this.setState({error: 'Erro ao Atualizar Lista Local'});
+          alert(error);
+          this.setState({error: 'Erro ao Atualizar Lista'});
       }
-    }*/
-
-    this.props.navigation.navigate('Home');
+    }
+    
   }
 
   updateName(text,itemName){

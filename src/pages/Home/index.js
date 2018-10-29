@@ -5,7 +5,6 @@ import FontAwesome, { Icons } from 'react-native-fontawesome';
 import Header from '../../components/Header';
 import Api from '../../services/api';
 import storage from '../../services/storage';
-//import Sync from '../../services/sync';
 
 
 export default class Home extends Component {
@@ -27,16 +26,10 @@ export default class Home extends Component {
 
     NetInfo.isConnected.fetch().done((isConnected) => {
       this.setState({ status: isConnected });
-
-      //if(this.state.status)
-      //Sync.sync();
     });
 
     NetInfo.isConnected.addEventListener('connectionChange', (res) => {
       this.setState({ status: res });
-
-      //if(this.state.status)
-      //Sync.sync();
     });
   }
 
@@ -66,20 +59,18 @@ export default class Home extends Component {
     });
     this.refresh();
 
-    /*try {
-      const response = await Api.delete(`/list/${id}`);
+    try {
+      const response = Api.delete(`/list/${id}`);
       this.refresh();
     }
     catch (error) {
       alert(error);
       this.setState({ error: 'Erro ao Deletar Lista' });
-    }*/
+    }
   }
 
-  logout() {
-    AsyncStorage.clear();
-    storage.clearMap();
-    this.props.navigation.navigate('Login');
+  settings(){
+    this.props.navigation.navigate('Settings');
   }
 
   confirmationRemoveItem(item) {
@@ -95,10 +86,24 @@ export default class Home extends Component {
     )
   }
 
-  getList() {
-    storage.getAllDataForKey('list').then(lists => {
-      this.setState({ data: lists });
-    });
+  async getList() {
+    
+    if(!this.state.status){
+      storage.getAllDataForKey('list').then(lists => {
+        this.setState({ data: lists });
+      });
+    }
+    else{
+      id = await AsyncStorage.getItem('@EasyList:id');
+      
+      try{
+        const response = await Api.get(`/list/user/${id}`);        
+        this.setState({ data: response.data });
+      }
+      catch(error){
+        this.setState({error: error});
+      }
+    }
   };
 
   render() {
@@ -106,8 +111,8 @@ export default class Home extends Component {
       <View style={Styles.contentView}>
         <Header title='EasyList'
           leftComponent={
-            <TouchableOpacity onPress={() => this.logout()}>
-              <FontAwesome style={Styles.leftComponentIcon}>{Icons.signOut}</FontAwesome>              
+            <TouchableOpacity onPress={() => this.settings()}>
+              <FontAwesome style={Styles.leftComponentIcon}>{Icons.cog}</FontAwesome>              
             </TouchableOpacity>
           }
 

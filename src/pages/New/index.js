@@ -76,45 +76,31 @@ export default class New extends Component {
             expires: null
         })
 
-       /*if(this.state.status){
-            try{
-            const response = await Api.post('/list', {
+        // Verify if device is not connected
+        if(!this.state.status){
+            //Add Request in queue
+            const newItem = {
+                id: id,
                 idUser: await AsyncStorage.getItem('@EasyList:id'),
                 name: this.state.InputName,
                 items: this.state.items
-            });
-            
-            
+            }
+
+            sync.addItem(newItem);
+        }
+        else{
+            //Insert in API
+            try{
+                const response = await Api.post('/list', {
+                    idUser: await AsyncStorage.getItem('@EasyList:id'),
+                    name: this.state.InputName,
+                    items: this.state.items
+                });  
             }
             catch(error){            
                 this.setState({error: 'Erro ao Criar Lista'});
             }
-        }else{
-            let item = {
-                method: 'post',
-                url: '/list',
-                body: {
-                    idUser:  AsyncStorage.getItem('@EasyList:id'),
-                    name: this.state.InputName,
-                    items: this.state.items
-                }
-            };
-
-            storage.save({
-                key:'sync',
-                id: id,
-                data: item,
-                expires: null
-            })
-
-            /*storage.getIdsForKey('sync').then(ids => {
-                alert(JSON.stringify(ids));
-            });*/
-            
-
-            //Sync.addItem(item);
-            //Sync.showItems();
-    
+        }
 
         this.props.navigation.navigate('Home');
     }

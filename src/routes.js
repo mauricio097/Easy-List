@@ -3,7 +3,7 @@ import { createStackNavigator } from 'react-navigation';
 import Home from './pages/Home';
 import New from './pages/New';
 import Details from './pages/Details';
-import Edit from './pages/Edit';
+import Settings from './pages/Settings';
 import Login from './pages/Login';
 import Register from './pages/Register';
 
@@ -36,8 +36,8 @@ export const SignedInRoutes = createStackNavigator({
       header:null
     }
   },
-  Edit: {
-    screen: Edit,
+  Settings: {
+    screen: Settings,
     navigationOptions: {
       header:null
     }

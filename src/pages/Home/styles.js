@@ -34,7 +34,6 @@ const Styles = StyleSheet.create({
     leftComponentIcon: {
         color: '#FFF',
         fontSize: 25,
-        marginLeft:8
     },
     rightComponentIcon:{
         color: '#FFF',

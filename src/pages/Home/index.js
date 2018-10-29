@@ -53,19 +53,14 @@ export default class Home extends Component {
   }
 
   removeItem(id) {
-    storage.remove({
-      key: 'list',
-      id: id
-    });
-    this.refresh();
-
-    try {
-      const response = Api.delete(`/list/${id}`);
+    try{
+      storage.remove({
+        key: 'list',
+        id: id
+      });
       this.refresh();
-    }
-    catch (error) {
-      alert(error);
-      this.setState({ error: 'Erro ao Deletar Lista' });
+    }catch(error){
+      Alert.alert('Erro','Erro ao Remover Lista');
     }
   }
 
@@ -87,29 +82,19 @@ export default class Home extends Component {
   }
 
   async getList() {
-    
-    if(!this.state.status){
+    try{
       storage.getAllDataForKey('list').then(lists => {
         this.setState({ data: lists });
-      });
-    }
-    else{
-      id = await AsyncStorage.getItem('@EasyList:id');
-      
-      try{
-        const response = await Api.get(`/list/user/${id}`);        
-        this.setState({ data: response.data });
-      }
-      catch(error){
-        this.setState({error: error});
-      }
+      }); 
+    }catch(error){
+      Alert.alert('Erro','Erro ao Carregar Lista');
     }
   };
 
   render() {
     return (
       <View style={Styles.contentView}>
-        <Header title='EasyList'
+        <Header title='Easy List'
           leftComponent={
             <TouchableOpacity onPress={() => this.settings()}>
               <FontAwesome style={Styles.leftComponentIcon}>{Icons.cog}</FontAwesome>              

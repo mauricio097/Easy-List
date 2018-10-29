@@ -4,6 +4,8 @@ import Styles from './styles';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
 import Header from '../../components/Header';
 import { Avatar } from 'react-native-elements';
+import storage from '../../services/storage';
+import SyncStorage from 'sync-storage';
 
 export default class Settings extends Component {
 
@@ -31,9 +33,13 @@ export default class Settings extends Component {
   }
 
   logout() {
-    AsyncStorage.clear();
+    SyncStorage.remove('@EasyList:token');
+    SyncStorage.remove('@EasyList:name');
+    SyncStorage.remove('@EasyList:email');
+    SyncStorage.remove('@EasyList:id');
+    
     storage.clearMap();
-    this.props.navigation.navigate('Login');
+    this.props.navigation.navigate('Login');    
   }
 
   render() {
@@ -67,7 +73,7 @@ export default class Settings extends Component {
             </TouchableOpacity>
           </View>
           <View style={Styles.itemsView}>
-            <TouchableOpacity style={Styles.item} onPress={() => alert('Deslogar')}>
+            <TouchableOpacity style={Styles.item} onPress={() => this.logout()}>
               <FontAwesome style={Styles.icons}>{Icons.signOut}</FontAwesome>
               <Text style={Styles.itemText}>Logout</Text>
             </TouchableOpacity>

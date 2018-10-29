@@ -54,7 +54,6 @@ export default class register extends Component {
           }
     }
 
-
     render() {
         return (
             <View style={Styles.contentView}>
@@ -90,7 +89,7 @@ export default class register extends Component {
                     <View>
 
                         <TouchableOpacity onPress={() => this.props.navigation.navigate('Login')}>
-                            <Text style={Styles.registerText}> Logar</Text>
+                            <Text style={Styles.registerText}>Voltar ao Login</Text>
                         </TouchableOpacity>
                     </View>
                 </View>

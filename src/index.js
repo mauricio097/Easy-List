@@ -1,32 +1,24 @@
 import React from 'react';
 import './config/StatusBarConfig';
-import { createRootNavigator, createMenuNavigator } from './routes';
-import { YellowBox, AsyncStorage } from 'react-native';
+import { createRootNavigator } from './routes';
+import { YellowBox } from 'react-native';
+import SyncStorage from 'sync-storage';
 import Api from './services/api';
 
-//YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
+YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
 export default class App extends React.Component {
   state = {
-    logged: null
+    logged: null,
+    token: null
   };
 
-  componentWillMount() {
-    if(this.isLogged()){
+  componentWillMount() {    
+    const token = SyncStorage.get('@EasyList:token');
+    if(token)
       this.setState({logged: true});
-    }
-    else{
+    else
       this.setState({logged: false});
-    }
-  }
-
-  async isLogged(){
-    const token = await AsyncStorage.getItem('@EasyList:token');
-    if(token){
-      return true;
-    }else{
-      return false;
-    }
   }
 
   render() {

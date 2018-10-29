@@ -21,8 +21,7 @@ const Styles = StyleSheet.create({
   },
   itemListView: {
     alignItems: "center",
-    backgroundColor: '#FFF',
-    margin: 4,
+    backgroundColor: '#FFF',    
     padding: 20,
     borderRadius: 5,
     flexDirection: 'row',
@@ -37,10 +36,11 @@ const Styles = StyleSheet.create({
   },
   inputName:{
     backgroundColor: '#E7E7E7',
-    width: '25%',
+    width: '30%',
     height: 40,
     marginRight: 20,
-    borderRadius: 5
+    borderRadius: 5,
+    textAlign:'center'
   },
   inputPrice:{
     backgroundColor: '#E7E7E7',
@@ -52,7 +52,7 @@ const Styles = StyleSheet.create({
   },
   inputQuantity:{
     backgroundColor: '#E7E7E7',
-    width: '20%',
+    width: '22%',
     height: 40,
     marginRight: 20,
     borderRadius: 5,

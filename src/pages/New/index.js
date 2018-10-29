@@ -69,37 +69,16 @@ export default class New extends Component {
             items: this.state.items
         }
 
-        storage.save({
-            key:'list',
-            id: id,
-            data: newList,
-            expires: null
-        })
-
-        // Verify if device is not connected
-        if(!this.state.status){
-            //Add Request in queue
-            const newItem = {
+        try{
+            storage.save({
+                key:'list',
                 id: id,
-                idUser: await AsyncStorage.getItem('@EasyList:id'),
-                name: this.state.InputName,
-                items: this.state.items
-            }
-
-            sync.addItem(newItem);
+                data: newList,
+                expires: null
+            })
         }
-        else{
-            //Insert in API
-            try{
-                const response = await Api.post('/list', {
-                    idUser: await AsyncStorage.getItem('@EasyList:id'),
-                    name: this.state.InputName,
-                    items: this.state.items
-                });  
-            }
-            catch(error){            
-                this.setState({error: 'Erro ao Criar Lista'});
-            }
+        catch(error){
+            Alert.alert('Erro','Erro ao Gravar Lista');
         }
 
         this.props.navigation.navigate('Home');

@@ -37,7 +37,14 @@ const Styles = StyleSheet.create({
         marginTop: 20
     },
     textButtonLogin: {
-        color: '#FFF'
+        color: '#FFF',
+        fontWeight:'bold'
+    },
+    error:{
+        textAlign:"center",
+        marginTop: 15,
+        color: "#FFF",
+        fontWeight: 'bold'
     }
 });
 

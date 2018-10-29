@@ -37,7 +37,8 @@ const Styles = StyleSheet.create({
         marginTop: 20
     },
     textButtonRegister: {
-        color: '#FFF'
+        color: '#FFF',
+        fontWeight: 'bold'
     }
 });
 

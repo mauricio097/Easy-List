@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StatusBar, Image, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, StatusBar, Image, TextInput, TouchableOpacity, ToastAndroid } from 'react-native';
 import Styles from './styles';
 import Api from '../../services/api';
 
@@ -21,43 +21,43 @@ export default class register extends Component {
     }
 
     handleNameChange = (name) => {
-        this.setState({inputName: name});
+        this.setState({ inputName: name });
     }
 
     handleEmailChange = (email) => {
-        this.setState({inputEmail: email});
+        this.setState({ inputEmail: email });
     }
 
     handlePasswordChange = (password) => {
-        this.setState({inputPassword: password});
+        this.setState({ inputPassword: password });
     }
 
     handleRegisterPress = async () => {
-        if((this.state.inputEmail.length === 0) || (this.state.inputPassword.length === 0)
-         || (this.state.inputName.length === 0)
-        ){
-            this.setState({error: 'Os campos devem sem preenchidos'}, () => false);
+        if ((this.state.inputEmail.length === 0) || (this.state.inputPassword.length === 0)
+            || (this.state.inputName.length === 0)
+        ) {
+            ToastAndroid.show('Os Campos Devem ser Preenchidos', ToastAndroid.SHORT);
         }
         else {
-          try{
-           const response = await Api.post('/user', {
-                name: this.state.inputName,
-                email: this.state.inputEmail,
-                password: this.state.inputPassword
-              });
+            try {
+                const response = await Api.post('/user', {
+                    name: this.state.inputName,
+                    email: this.state.inputEmail,
+                    password: this.state.inputPassword
+                });
 
                 this.props.navigation.navigate('Login');
-            
-            }catch(error){
-                this.setState({error: 'Erro ao Cadastrar Usuário'});
+
+            } catch (error) {
+                ToastAndroid.show('Erro ao Cadastrar Usuário', ToastAndroid.SHORT);
             }
-          }
+        }
     }
 
     render() {
         return (
             <View style={Styles.contentView}>
-            <Image source={require('../../images/logo.png')} style={Styles.logo} />
+                <Image source={require('../../images/logo.png')} style={Styles.logo} />
                 <View style={Styles.formView} >
                     <TextInput style={Styles.input}
                         underlineColorAndroid="transparent"
@@ -85,7 +85,6 @@ export default class register extends Component {
                     <TouchableOpacity style={Styles.buttonRegister} onPress={this.handleRegisterPress}>
                         <Text style={Styles.textButtonRegister}>Cadastrar</Text>
                     </TouchableOpacity>
-                        <Text>{this.state.error}</Text>
                     <View>
 
                         <TouchableOpacity onPress={() => this.props.navigation.navigate('Login')}>

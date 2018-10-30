@@ -4,7 +4,7 @@ import Styles from './styles';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
 import Header from '../../components/Header';
 import Api from '../../services/api';
-import sync from '../../services/sync';
+
 
 export default class New extends Component {
     static navigationOptions = {
@@ -76,6 +76,14 @@ export default class New extends Component {
                 data: newList,
                 expires: null
             })
+
+            let newItem = {
+                id: id,
+                method: 'post',
+                data: newList
+            }
+
+           
         }
         catch(error){
             Alert.alert('Erro','Erro ao Gravar Lista');

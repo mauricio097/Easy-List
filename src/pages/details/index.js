@@ -3,7 +3,6 @@ import { View, Text, FlatList, TouchableOpacity, TextInput, NetInfo, Picker } fr
 import Styles from './styles';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
 import Header from '../../components/Header';
-import sync from '../../services/sync';
 import Swipeout from 'rc-swipeout';
 
 
@@ -47,13 +46,13 @@ export default class Details extends Component {
 
   calculateTotal(items) {
     let total = 0;
-    for (i in items) {
+    /*for (i in items) {
       items[i].price = items[i].price.replace(',', '.');
       total += items[i].price * items[i].quantity;
     }
     let float = parseFloat(total.toFixed(2));
-    let totalFloat = float.toString().replace('.', ',');
-    this.setState({ total: totalFloat });
+    let totalFloat = float.toString().replace('.', ',');*/
+    this.setState({ total: total });
   }
 
   async saveData() {

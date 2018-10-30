@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image, AsyncStorage, ToastAndroid } from 'react-native';
 import Styles from './styles';
 import Api from '../../services/api';
-import SyncStorage from 'sync-storage';
 
 export default class login extends Component {
 
@@ -19,7 +18,6 @@ export default class login extends Component {
     state = {
         inputEmail: '',
         inputPassword: '',
-        erro: null,
         lists: []
     }
 
@@ -33,7 +31,7 @@ export default class login extends Component {
 
     handleLoginPress = async () => {
         if ((this.state.inputEmail.length === 0) || (this.state.inputPassword.length === 0)) {
-            this.setState({ error: 'Os Campos Devem ser Preenchidos' }, () => false);
+            ToastAndroid.show('Os Campos Devem ser Preenchidos', ToastAndroid.SHORT);
         }
         else {
             try {
@@ -42,22 +40,26 @@ export default class login extends Component {
                     password: this.state.inputPassword
                 });
 
-                SyncStorage.set('@EasyList:token', response.data.token);
-                SyncStorage.set('@EasyList:name', response.data.name);
-                SyncStorage.set('@EasyList:email', response.data.email);
-                SyncStorage.set('@EasyList:id', `${response.data.id}`);
+                let user = {
+                    token: response.data.token,
+                    name: response.data.name,
+                    email: response.data.email,
+                    id: response.data.id
+                }
+
+                AsyncStorage.setItem('@EasyList:user', JSON.stringify(user));
 
                 this.inputItem.clear();
 
                 this.props.navigation.navigate('Home');
 
             } catch (error) {
-                if(error.request.status){
-                    this.setState({ error: 'Usuário ou Senha Incorreto(s)' }, () => false);    
+                if (error.request.status) {
+                    ToastAndroid.show('Usuário ou Senha Incorreto(s)', ToastAndroid.SHORT);
                 }
-                else{
-                    this.setState({ error: 'Falha ao realizar Login' }, () => false);
-                }                
+                else {
+                    ToastAndroid.show('Falha ao Realizar Login', ToastAndroid.SHORT);
+                }
             }
         }
     }
@@ -87,7 +89,6 @@ export default class login extends Component {
                         autoCorrect={false}
                         secureTextEntry
                     />
-                    <Text style={Styles.error}>{this.state.error}</Text>
                     <TouchableOpacity style={Styles.buttonLogin} onPress={this.handleLoginPress}>
                         <Text style={Styles.textButtonLogin}>Logar</Text>
                     </TouchableOpacity>

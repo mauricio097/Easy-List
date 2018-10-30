@@ -33,10 +33,7 @@ export default class Settings extends Component {
   }
 
   logout() {
-    SyncStorage.remove('@EasyList:token');
-    SyncStorage.remove('@EasyList:name');
-    SyncStorage.remove('@EasyList:email');
-    SyncStorage.remove('@EasyList:id');
+    SyncStorage.remove('@EasyList:user');    
     
     storage.clearMap();
     this.props.navigation.navigate('Login');    

@@ -6,6 +6,7 @@ import Header from '../../components/Header';
 import Api from '../../services/api';
 import storage from '../../services/storage';
 
+var SQLite = require('react-native-sqlite-storage');
 
 export default class Home extends Component {
 
@@ -82,13 +83,18 @@ export default class Home extends Component {
   }
 
   async getList() {
-    try{
-      storage.getAllDataForKey('list').then(lists => {
-        this.setState({ data: lists });
-      }); 
-    }catch(error){
-      Alert.alert('Erro','Erro ao Carregar Lista');
-    }
+    let db = SQLite.openDatabase({name: 'database.db',createFromLocation:'~database.db'});
+    db.transaction((tx) => {         
+      tx.executeSql('SELECT * FROM Lists', [], (tx, results) => {                          
+          let items = []; 
+          for(let i=0;i<results.rows.length;i++){
+            items.push(results.rows.item(i));
+          }
+          this.setState({ data: items });
+       }, function (error){
+          alert(JSON.stringify(error));
+        });
+    });
   };
 
   render() {
@@ -116,7 +122,7 @@ export default class Home extends Component {
               return (
                 <TouchableOpacity onPress={() => this.selectItem(item)}>
                   <View style={Styles.itemListView}>
-                    <TouchableOpacity onPress={() => this.confirmationRemoveItem(item)}>
+                    <TouchableOpacity onPress={() => this.teste()}>
                       <FontAwesome style={Styles.minusBarButton}>{Icons.minusSquare}</FontAwesome>
                     </TouchableOpacity>
                     <Text style={Styles.itemListText}>{item.name}</Text>
@@ -133,3 +139,4 @@ export default class Home extends Component {
     );
   }
 }
+//this.confirmationRemoveItem(item)

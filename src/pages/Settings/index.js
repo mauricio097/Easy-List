@@ -5,7 +5,6 @@ import FontAwesome, { Icons } from 'react-native-fontawesome';
 import Header from '../../components/Header';
 import { Avatar } from 'react-native-elements';
 import storage from '../../services/storage';
-import SyncStorage from 'sync-storage';
 
 export default class Settings extends Component {
 
@@ -32,11 +31,28 @@ export default class Settings extends Component {
     );
   }
 
+  sync(){
+    storage.sync();
+  }
+
   logout() {
-    SyncStorage.remove('@EasyList:user');    
+    /*let db = SQLite.openDatabase({name: 'database.db',createFromLocation:'~database.db'});
+    db.transaction((tx) => {         
+    tx.executeSql('Delete from Users', [], (tx, results) => {      
+      db.transaction((tx) => {         
+        tx.executeSql('Delete from Lists', [], (tx, results) => {      
+            if(results.rowsAffected > 0)                                       
+              this.props.navigation.navigate('Login');                                
+        }, function (error){
+            ToastAndroid.show('Erro ao Fazer Logout', ToastAndroid.SHORT);
+            });
+        });                                   
+    }, function (error){
+        ToastAndroid.show('Erro ao Fazer Logout', ToastAndroid.SHORT);
+        });
+    });
+*/
     
-    storage.clearMap();
-    this.props.navigation.navigate('Login');    
   }
 
   render() {
@@ -64,7 +80,7 @@ export default class Settings extends Component {
             </TouchableOpacity>
           </View>
           <View style={Styles.itemsView}>
-            <TouchableOpacity style={Styles.item} onPress={() => alert('Sincronizar')}>
+            <TouchableOpacity style={Styles.item} onPress={() => this.sync()}>
               <FontAwesome style={Styles.icons}>{Icons.exchange}</FontAwesome>
               <Text style={Styles.itemText}>Sincronizar Dados</Text>
             </TouchableOpacity>

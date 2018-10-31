@@ -54,15 +54,8 @@ export default class Home extends Component {
   }
 
   removeItem(id) {
-    try{
-      storage.remove({
-        key: 'list',
-        id: id
-      });
-      this.refresh();
-    }catch(error){
-      Alert.alert('Erro','Erro ao Remover Lista');
-    }
+    storage.delete(id);
+    this.refresh();
   }
 
   settings(){
@@ -85,12 +78,18 @@ export default class Home extends Component {
   async getList() {
     let db = SQLite.openDatabase({name: 'database.db',createFromLocation:'~database.db'});
     db.transaction((tx) => {         
-      tx.executeSql('SELECT * FROM Lists', [], (tx, results) => {                          
+      tx.executeSql('SELECT * FROM Lists WHERE active="true"', [], (tx, results) => {                          
           let items = []; 
           for(let i=0;i<results.rows.length;i++){
-            items.push(results.rows.item(i));
+            let obj = {
+              id: results.rows.item(i).id,
+              name: results.rows.item(i).name,
+              idUser: results.rows.item(i).idUser,
+              items: JSON.parse(results.rows.item(i).items)
+            }
+            items.push(obj);
           }
-          this.setState({ data: items });
+          this.setState({ data: items });          
        }, function (error){
           alert(JSON.stringify(error));
         });
@@ -122,7 +121,7 @@ export default class Home extends Component {
               return (
                 <TouchableOpacity onPress={() => this.selectItem(item)}>
                   <View style={Styles.itemListView}>
-                    <TouchableOpacity onPress={() => this.teste()}>
+                    <TouchableOpacity onPress={() => this.removeItem(item.id)}>
                       <FontAwesome style={Styles.minusBarButton}>{Icons.minusSquare}</FontAwesome>
                     </TouchableOpacity>
                     <Text style={Styles.itemListText}>{item.name}</Text>

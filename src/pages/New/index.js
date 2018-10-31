@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-import { View, TextInput, FlatList, Text, TouchableOpacity , AsyncStorage , NetInfo } from 'react-native';
+import { View, TextInput, FlatList, Text, TouchableOpacity , AsyncStorage , NetInfo, ToastAndroid } from 'react-native';
 import Styles from './styles';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
 import Header from '../../components/Header';
-import Api from '../../services/api';
 
+
+
+var SQLite = require('react-native-sqlite-storage');
 
 export default class New extends Component {
     static navigationOptions = {
@@ -30,8 +32,8 @@ export default class New extends Component {
         NetInfo.isConnected.addEventListener('connectionChange', ( res ) => {
             this.setState( { status: res });         
         });
-    }
-
+    }   
+    
     insertItem() {
         let items = this.state.items;
         if(this.state.InputItem.length > 0){
@@ -41,8 +43,8 @@ export default class New extends Component {
             this.setState({ InputItem: ''});
             this.inputItem.clear();
         }
-        else{
-            this.setState({ error: 'Nome da Lista não pode ser Vazio'});
+        else{            
+            ToastAndroid.show('Nome da Lista não pode ser Vazio', ToastAndroid.SHORT);
         }
     }
 
@@ -57,39 +59,22 @@ export default class New extends Component {
         this.setState({items});
     }
 
-    async createList(){
-
-        const id = await  storage.getIdsForKey('list').then(ids => {
-            return ids.length+1;
-        });
-
-        let newList = {
-            id: id,
-            name: this.state.InputName,
-            items: this.state.items
-        }
-
-        try{
-            storage.save({
-                key:'list',
-                id: id,
-                data: newList,
-                expires: null
-            })
-
-            let newItem = {
-                id: id,
-                method: 'post',
-                data: newList
+    createList(){
+        let db = SQLite.openDatabase({name: 'database.db',createFromLocation:'~database.db'});
+        db.transaction((tx) => {         
+        tx.executeSql('INSERT INTO Lists (name,items) VALUES (?,?)', 
+            [this.state.InputName,JSON.stringify(this.state.items)], (tx, results) => {   
+            if(results.rowsAffected > 0){
+                ToastAndroid.show('Lista Cadastrada com Sucesso', ToastAndroid.SHORT);                 
+                this.props.navigation.navigate('Home');
             }
-
-           
-        }
-        catch(error){
-            Alert.alert('Erro','Erro ao Gravar Lista');
-        }
-
-        this.props.navigation.navigate('Home');
+            else
+                ToastAndroid.show('Erro ao Cadastrar Lista', ToastAndroid.SHORT);
+                        
+        }, function (error){
+            alert(JSON.stringify(error));
+            });
+        });
     }
 
     render() {

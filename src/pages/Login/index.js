@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image, AsyncStorage, ToastAndroid } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image, ToastAndroid } from 'react-native';
 import Styles from './styles';
 import Api from '../../services/api';
+
+var SQLite = require('react-native-sqlite-storage');
 
 export default class login extends Component {
 
@@ -11,14 +13,11 @@ export default class login extends Component {
 
     constructor(props) {
         super(props);
-
-
     }
 
     state = {
         inputEmail: '',
-        inputPassword: '',
-        lists: []
+        inputPassword: ''
     }
 
     handleEmailChange = (email) => {
@@ -40,25 +39,29 @@ export default class login extends Component {
                     password: this.state.inputPassword
                 });
 
-                let user = {
-                    token: response.data.token,
-                    name: response.data.name,
-                    email: response.data.email,
-                    id: response.data.id
-                }
+                let db = SQLite.openDatabase({ name: 'database.db', createFromLocation: '~database.db' });
+                db.transaction((tx) => {
+                    tx.executeSql('INSERT INTO User (id,name,email,token) VALUES (?,?,?,?)',
+                        [response.data.id,response.data.name, response.data.email, response.data.token], (tx, results) => {
+                            if (results.rowsAffected > 0) {
+                                this.props.navigation.navigate('Home');
+                            }
+                            else
+                                ToastAndroid.show('Usuário não Foi Gravado Local', ToastAndroid.SHORT);
 
-                AsyncStorage.setItem('@EasyList:user', JSON.stringify(user));
-
-                this.inputItem.clear();
-
-                this.props.navigation.navigate('Home');
+                        }, function (error) {
+                            ToastAndroid.show('Erro ao Realizar Login', ToastAndroid.SHORT);
+                        });
+                });
 
             } catch (error) {
                 if (error.request.status) {
                     ToastAndroid.show('Usuário ou Senha Incorreto(s)', ToastAndroid.SHORT);
+                    this.inputPassword.clear();
                 }
                 else {
                     ToastAndroid.show('Falha ao Realizar Login', ToastAndroid.SHORT);
+                    this.inputPassword.clear();
                 }
             }
         }
@@ -81,7 +84,7 @@ export default class login extends Component {
                         autoCorrect={false}
                     />
                     <TextInput style={Styles.input}
-                        ref={input => { this.inputItem = input }}
+                        ref={input => { this.inputPassword = input }}
                         underlineColorAndroid="transparent"
                         placeholder='Senha'
                         onChangeText={this.handlePasswordChange}

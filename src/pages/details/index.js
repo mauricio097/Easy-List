@@ -1,21 +1,19 @@
 import React, { Component } from 'react';
-import { View, Text, FlatList, TouchableOpacity, TextInput, NetInfo, Picker } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, TextInput, NetInfo, ToastAndroid } from 'react-native';
 import Styles from './styles';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
 import Header from '../../components/Header';
 import Swipeout from 'rc-swipeout';
 
+var SQLite = require('react-native-sqlite-storage');
 
 export default class Details extends Component {
 
   constructor(props) {
     super(props);
 
-    this.state = {
-      editable: true,
-      id: null,
-      name: '',
-      items: [],
+    this.state = {      
+      data: [],
       status: false,
       total: 0.00
     };
@@ -33,80 +31,70 @@ export default class Details extends Component {
     header: null
   };
 
-  componentDidMount() {
-
-    this.setState({
-      items: this.props.navigation.state.params.items,
-      name: this.props.navigation.state.params.name,
-      id: this.props.navigation.state.params.id
-    });
-
+  refresh() {        
+    this.setState({data:this.props.navigation.state.params});
     this.calculateTotal(this.props.navigation.state.params.items);
+}
+
+  componentDidMount() {
+    this.setState({data:this.props.navigation.state.params});
+    this.calculateTotal(this.props.navigation.state.params.items);
+
+    this.subs = [
+      this.props.navigation.addListener('willFocus', () => this.refresh()),
+    ];
   }
 
   calculateTotal(items) {
     let total = 0;
-    /*for (i in items) {
+    for (i in items) {
       items[i].price = items[i].price.replace(',', '.');
       total += items[i].price * items[i].quantity;
     }
     let float = parseFloat(total.toFixed(2));
-    let totalFloat = float.toString().replace('.', ',');*/
+    let totalFloat = float.toString().replace('.', ',');
     this.setState({ total: total });
   }
-
-  async saveData() {
-
-    const id = await storage.getIdsForKey('list').then(ids => {
-      return ids.length + 1;
+  
+  saveData() {    
+    let db = SQLite.openDatabase({name: 'database.db',createFromLocation:'~database.db'});
+    db.transaction((tx) => {         
+      tx.executeSql('UPDATE Lists SET items = ? WHERE id = ?',
+          [JSON.stringify(this.state.data.items),this.state.data.id], (tx, results) => {                          
+          if(results.rowsAffected>0){
+            ToastAndroid.show('Lista Atualizada com Sucesso', ToastAndroid.SHORT);
+          }                
+       }, function (error){
+          ToastAndroid.show('Erro ao Atualizar Lista', ToastAndroid.SHORT);
+        });
     });
-
-    let data = {
-      id: this.state.id,
-      name: this.state.name,
-      items: this.state.items
-    }
-
-    try {
-      storage.save({
-        key: 'list',
-        id: this.state.id,
-        data: data,
-        expires: null
-      });
-
-      this.props.navigation.navigate('Home');
-    }
-    catch (error) {
-      Alert.alert('Erro', 'Erro ao Atualizar Lista');
-    }
-
+    this.refresh();    
   }
 
-  updateName(text, itemName) {
-    let items = this.state.items;
+  updateName(text, id) {
+    let items = this.state.data.items;
     for (i in items) {
-      if (items[i].name === itemName) {
+      if (items[i].id === id) {
         items[i].name = text;
       }
     }
     this.setState(items);
   }
 
-  updatePrice(text, itemName) {
-    let items = this.state.items;
+  updatePrice(text, id) {
+    let items = this.state.data.items;
     for (i in items) {
-      if (items[i].name === itemName) {
+      if (items[i].id === id) {
         items[i].price = text;
       }
     }
     this.setState(items);
   }
 
-  updateQuantity(text, itemName) {
-    let items = this.state.items;
+  updateQuantity(text, id) {
+    let items = this.state.data.items;
     for (i in items) {
-      if (items[i].name === itemName) {
+      if (items[i].id === id) {
         items[i].quantity = text;
       }
     }
@@ -114,37 +102,25 @@ export default class Details extends Component {
   }
 
   removeItem(item) {
-    let items = this.state.items;
-    for (i in items) {
-      if (items[i].name === item.name) {
-        items.splice(i, 1);
+    let data = this.state.data;
+
+    for (i in data.items) {
+      if (data.items[i].name === item.name) {
+        data.items.splice(i, 1);
       }
     }
 
-    this.setState({ items });
+    this.setState({ data });
   }
 
   goBack() {
     this.props.navigation.navigate('Home');
   }
 
-  delete() {
-    alert('teset');
-  }
-
-  formatTotal(n) {
-    let valor = parseInt(n.replace(/[\D]+/g, ''));
-    var tmp = valor + '';
-    tmp = tmp.replace(/([0-9]{2})$/g, ",$1");
-    if (tmp.length > 6)
-      tmp = tmp.replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
-    return tmp;
-  }
-
   render() {
     return (
       <View style={Styles.contentView}>
-        <Header title={this.state.name}
+        <Header title={this.state.data.name}
           leftComponent={
             <TouchableOpacity onPress={() => this.goBack()}>
               <FontAwesome style={Styles.leftComponentIcon}>{Icons.arrowLeft} </FontAwesome>
@@ -158,7 +134,7 @@ export default class Details extends Component {
         />
         <View style={Styles.listView}>
           <FlatList
-            data={this.state.items}
+            data={this.state.data.items}
             keyExtractor={item => item.id}
             renderItem={({ item }) => {
               return (
@@ -169,29 +145,29 @@ export default class Details extends Component {
                   }]}
                 >
                   <View style={Styles.itemListView}>
-                    <TextInput
+                    <TextInput                      
                       underlineColorAndroid="transparent"
                       placeholder={item.name}
-                      onChangeText={(text) => this.updateName(text, item.name)}
+                      onChangeText={(text) => this.updateName(text, item.id)}
                       style={Styles.inputName}
                     />
                     <Text style={Styles.itemIconText} >
                       <FontAwesome>{Icons.dollar}</FontAwesome>
                     </Text>
-                    <TextInput
+                    <TextInput                      
                       placeholder={item.price}
                       underlineColorAndroid="transparent"
                       keyboardType='numeric'
-                      onChangeText={(text) => this.updatePrice(text, item.name)}
+                      onChangeText={(text) => this.updatePrice(text, item.id)}
                       style={Styles.inputPrice}
                     />
                     <Text style={Styles.itemIconText}>
                       <FontAwesome>{Icons.shoppingCart}</FontAwesome>
                     </Text>
-                    <TextInput
+                    <TextInput                      
                       placeholder={item.quantity}
                       underlineColorAndroid="transparent"
-                      onChangeText={(text) => this.updateQuantity(text, item.name)}
+                      onChangeText={(text) => this.updateQuantity(text, item.id)}
                       keyboardType='numeric'
                       style={Styles.inputQuantity}
                     />

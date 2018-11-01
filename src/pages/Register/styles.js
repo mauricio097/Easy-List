@@ -32,7 +32,7 @@ const Styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: Colors.button,
         padding: 7,
-        marginHorizontal: 150,
+        marginHorizontal: 130,
         borderRadius: 5,
         marginTop: 20
     },

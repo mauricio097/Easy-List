@@ -115,7 +115,6 @@ export default class Settings extends Component {
               <FontAwesome style={Styles.icons}>{Icons.signOut}</FontAwesome>
               <Text style={Styles.itemText}>Logout</Text>
             </TouchableOpacity>
-
           </View>
         </View>
       </View>

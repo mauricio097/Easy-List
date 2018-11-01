@@ -16,10 +16,12 @@ export default class App extends React.Component {
     
     this.state = {
       logged: null
-    };
-
-    this.isLogged();
+    };  
   } 
+
+  componentDidMount(){
+    this.isLogged();
+  }
   
   async isLogged(){
     Database.authenticate()

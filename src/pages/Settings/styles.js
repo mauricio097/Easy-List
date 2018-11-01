@@ -14,10 +14,10 @@ const Styles = StyleSheet.create({
   },
   contentView: {
     flex:1,
-    backgroundColor:'#E7E7E7'
+    backgroundColor:'#E7E7E7'    
   },
   itemsView:{
-    height:'8%',
+    height:'12%',
     backgroundColor:'#FFF',
     borderRadius:5,
     justifyContent:'center',
@@ -26,7 +26,7 @@ const Styles = StyleSheet.create({
   },
   itemFirstView:{
     flexDirection:'row',
-    height: '15%',
+    height: '20%',
     marginTop:5,
     alignItems:'center',
     backgroundColor: '#FFF',
@@ -38,7 +38,7 @@ const Styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   itemFirstEmail:{
-    fontSize: 18
+    fontSize: 16
   },
   itemFirstFields:{
     marginLeft: 15
@@ -52,11 +52,11 @@ const Styles = StyleSheet.create({
     marginLeft:10
   },
   itemText:{
-    marginLeft: 5,
+    marginLeft: 8,
     fontSize: 20,
   },
   icons:{
-    fontSize: 20
+    fontSize: 22
   }
 });
 

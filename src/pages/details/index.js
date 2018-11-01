@@ -4,6 +4,7 @@ import Styles from './styles';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
 import Header from '../../components/Header';
 import Swipeout from 'rc-swipeout';
+import Database from '../../services/storage';
 
 export default class Details extends Component {
 
@@ -40,7 +41,7 @@ export default class Details extends Component {
       items[i].price = items[i].price.replace(',', '.');
       total += items[i].price * items[i].quantity;
     }
-    let float = parseFloat(total.toFixed(2));
+    let float = parseFloat(total).toFixed(2);
     let totalFloat = float.toString().replace('.', ',');
     this.setState({ total: totalFloat });
   }

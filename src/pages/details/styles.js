@@ -15,7 +15,7 @@ const Styles = StyleSheet.create({
   },
   listView: {
     marginTop: 10,
-    marginHorizontal: 25,
+    marginHorizontal: 20,
     backgroundColor: '#E7E7E7',
     flex:0.95
   },
@@ -38,7 +38,7 @@ const Styles = StyleSheet.create({
     backgroundColor: '#E7E7E7',
     width: '30%',
     height: 40,
-    marginRight: 20,
+    marginRight: 10,
     borderRadius: 5,
     textAlign:'center'
   },
@@ -46,21 +46,21 @@ const Styles = StyleSheet.create({
     backgroundColor: '#E7E7E7',
     width: '20%',
     height: 40,
-    marginRight: 20,
+    marginRight: 10,
     borderRadius: 5,
     textAlign:'center'
   },
   inputQuantity:{
     backgroundColor: '#E7E7E7',
-    width: '22%',
+    width: '20%',
     height: 40,
-    marginRight: 20,
+    marginRight: 10,
     borderRadius: 5,
     textAlign:'center'
   },
   totalButtonView:{
       backgroundColor: colors.background,
-      flex:0.07,
+      flex:0.08,
       alignItems: 'center',
       justifyContent: 'center'
   },

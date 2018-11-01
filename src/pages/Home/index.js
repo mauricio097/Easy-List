@@ -22,7 +22,7 @@ export default class Home extends Component {
     this.refresh = this.refresh.bind(this);
   }
 
-  selectItem(item) {
+  selectItem(item) {    
     this.props.navigation.navigate('Details', item);
   };
 

@@ -15,7 +15,7 @@ const Styles = StyleSheet.create({
   },
   listView: {
     marginTop: 10,
-    marginHorizontal: 10,
+    marginHorizontal: 25,
     backgroundColor: '#E7E7E7',
     flex:0.95
   },

@@ -27,7 +27,7 @@ export default class Details extends Component {
 
   componentDidMount() {
     this.setState({data:this.props.navigation.state.params});
-    this.calculateTotal(this.props.navigation.state.params.items);
+    this.calculateTotal(this.props.navigation.state.params.items);    
 
     this.subs = [
       this.props.navigation.addListener('willFocus', () => this.refresh()),
@@ -42,7 +42,7 @@ export default class Details extends Component {
     }
     let float = parseFloat(total.toFixed(2));
     let totalFloat = float.toString().replace('.', ',');
-    this.setState({ total: total });
+    this.setState({ total: totalFloat });
   }
   
   saveData() {    

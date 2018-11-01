@@ -98,7 +98,7 @@ const storage = ({
                 if(noSync[i].active == "false"){ //DELETE
                     try{
                         const response = Api.delete(`/list/${dataApi[i].id}`);
-                        ToastAndroid.show('Registro Apagado', ToastAndroid.SHORT);
+                        //ToastAndroid.show('Registro Apagado', ToastAndroid.SHORT);
                     }
                     catch(error){
                         ToastAndroid.show(error, ToastAndroid.SHORT);
@@ -111,7 +111,7 @@ const storage = ({
                                 name: noSync[i].name,
                                 items: noSync[i].items
                             });                            
-                            ToastAndroid.show('Registro Atualizado', ToastAndroid.SHORT);
+                            //ToastAndroid.show('Registro Atualizado', ToastAndroid.SHORT);
                         }
                         catch(error){
                             ToastAndroid.show(error, ToastAndroid.SHORT);
@@ -124,7 +124,7 @@ const storage = ({
                                 name: noSync[i].name,
                                 items: noSync[i].items
                             });                             
-                            ToastAndroid.show('Registro Inserido', ToastAndroid.SHORT);
+                            //ToastAndroid.show('Registro Inserido', ToastAndroid.SHORT);
                         }
                         catch(error){            
                             ToastAndroid.show(error, ToastAndroid.SHORT);
@@ -133,9 +133,11 @@ const storage = ({
                 }
                 this.deleteData(noSync[i].id);
             }
+
+            ToastAndroid.show("Dados Sincronizados Com Sucesso", ToastAndroid.SHORT);
         }
         else{
-            ToastAndroid.show("Dados Sincronizados", ToastAndroid.SHORT);
+            ToastAndroid.show("Não Há Dados para Sincronizar", ToastAndroid.SHORT);
         }                        
     },
     async getLists(){
@@ -143,9 +145,15 @@ const storage = ({
             db.transaction((tx) => {
                 tx.executeSql('SELECT * FROM Lists WHERE active="true"', [], (tx, results) => {                                
                     let lists=[];
-                    for(let i=0;i<results.rows.length;i++){
-                        let row = results.rows.item(i);
-                        lists.push(row); 
+                    for(let i=0;i<results.rows.length;i++){                        
+                        let newItem = {
+                            id: results.rows.item(i).id, 
+                            name: results.rows.item(i).name,
+                            items: JSON.parse(results.rows.item(i).items),
+                            active: results.rows.item(i).active,
+                            sync: results.rows.item(i).sync,
+                         };
+                        lists.push(newItem); 
                     }                                   
                     resolve(lists);
                 });
@@ -179,6 +187,15 @@ const storage = ({
                 });
             });
         });   
+    },
+    async authenticate(){
+        return new Promise((resolve, reject) => {
+            db.transaction((tx) => {
+                tx.executeSql('SELECT * FROM User LIMIT 1', [], (tx, results) => {                                
+                    resolve(results.rows.length);
+                });
+            });
+        });    
     }
 });
 

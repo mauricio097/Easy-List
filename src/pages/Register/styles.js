@@ -31,7 +31,7 @@ const Styles = StyleSheet.create({
     buttonRegister: {
         alignItems: 'center',
         backgroundColor: Colors.button,
-        padding: 10,
+        padding: 7,
         marginHorizontal: 150,
         borderRadius: 5,
         marginTop: 20

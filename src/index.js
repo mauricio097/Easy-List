@@ -15,26 +15,23 @@ export default class App extends React.Component {
     super(props);
     
     this.state = {
-      logged: false
+      logged: null
     };
 
     this.isLogged();
   } 
   
-  isLogged(){    
-    let db = SQLite.openDatabase({name: 'database.db',createFromLocation:'~database.db'});
-    db.transaction((tx) => {      
-    tx.executeSql('SELECT * FROM User', [], (tx, results) => {             
-      if(results.rows.length > 0)                                       
-          this.setState({logged: true});
-        else
-          this.setState({logged: false});
-                    
-    }, function (error){
-        alert(JSON.stringify(error));  
-      //ToastAndroid.show('Erro ao Validar Usuário', ToastAndroid.SHORT);
-      });
-    });
+  async isLogged(){
+    Database.authenticate()
+    .then(data => {
+      if(data>0)
+        this.setState({logged: true});
+      else
+        this.setState({logged: false});
+    })
+    .catch(error => {
+      ToastAndroid.show(error, ToastAndroid.SHORT);
+    });   
   }
 
   render() {

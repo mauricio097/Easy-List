@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { View, TouchableOpacity, Text, Alert } from 'react-native';
+import { View, TouchableOpacity, Text, Alert,ToastAndroid,NetInfo } from 'react-native';
 import Styles from './styles';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
 import Header from '../../components/Header';
 import { Avatar } from 'react-native-elements';
 import Database from '../../services/storage';
-let SQLite = require('react-native-sqlite-storage');
+
 
 export default class Settings extends Component {
 
@@ -13,14 +13,37 @@ export default class Settings extends Component {
     super(props);
 
     this.state = {
-
+      name:'',
+      email:'',
+      nameIcon:'',
+      status:null
     };
+
+    NetInfo.isConnected.fetch().done((isConnected) => {
+      this.setState({ status: isConnected });
+      if(!isConnected){
+        ToastAndroid.show('Você está Offline', ToastAndroid.SHORT);
+      }
+    });
+
+    NetInfo.isConnected.addEventListener('connectionChange', (res) => {
+      this.setState({ status: res });
+      if(res){
+        ToastAndroid.show('Você está Online', ToastAndroid.SHORT);
+      }
+    });
+  
+  }
+
+  async componentDidMount(){
+    const dataUser = await Database.loadDataUser();    
+    this.setState({name: dataUser.name,email: dataUser.email});
+    this.formatName();
   }
 
   static navigationOptions = {
     header: null
   };
-
 
   goBack() {
     this.props.navigation.navigate('Home');
@@ -33,27 +56,30 @@ export default class Settings extends Component {
   }
 
   sync(){
-    Database.sync();
+    if(this.state.status){
+      ToastAndroid.show("Sincronizando Dados...", ToastAndroid.SHORT);
+      Database.sync();
+    }
+    else{
+      ToastAndroid.show("Você Não Está Conectado à Internet...", ToastAndroid.SHORT);
+    }
   }
 
   logout() {
-    let db = SQLite.openDatabase({name: 'database.db',createFromLocation:'~database.db'});
-    db.transaction((tx) => {         
-    tx.executeSql('Delete from User', [], (tx, results) => {      
-      db.transaction((tx) => {         
-        tx.executeSql('Delete from Lists', [], (tx, results) => {      
-            if(results.rowsAffected > 0)                                       
-              this.props.navigation.navigate('Login');                                
-        }, function (error){
-            ToastAndroid.show('Erro ao Fazer Logout', ToastAndroid.SHORT);
-            });
-        });                                   
-    }, function (error){
-        ToastAndroid.show('Erro ao Fazer Logout', ToastAndroid.SHORT);
-        });
-    });
+    Database.logout()
+    .then(data => {
+      this.props.navigation.navigate('Login');
+    })
+    .catch(error => {
+      ToastAndroid.show(error, ToastAndroid.SHORT);
+    })
   }
 
+  formatName() {
+    let newStr = this.state.name.substring(0, 1).toUpperCase();
+    return newStr;  
+  }
+   
   render() {
     return (
       <View style={Styles.containerView}>
@@ -64,12 +90,12 @@ export default class Settings extends Component {
             </TouchableOpacity>
           }
         />
-        <View style={Styles.contentView}>
+        <View style={Styles.contentView}>        
           <View style={Styles.itemFirstView}>
-            <Avatar containerStyle={Styles.avatar} large rounded title="M" activeOpacity={0.7} />
+            <Avatar containerStyle={Styles.avatar} large rounded title={this.formatName()} activeOpacity={0.7} />
             <View style={Styles.itemFirstFields}>
-              <Text style={Styles.itemFirstName}>Mauricio</Text>
-              <Text style={Styles.itemFirstEmail}>junior14_santos@hotmail.com</Text>
+              <Text style={Styles.itemFirstName}>{this.state.name}</Text>
+              <Text style={Styles.itemFirstEmail}>{this.state.email}</Text>
             </View>
           </View>
           <View style={Styles.itemsView}>
@@ -95,4 +121,6 @@ export default class Settings extends Component {
       </View>
     );
   }
+
+  
 }

@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
-import { View, Text, FlatList, TouchableOpacity, TextInput, NetInfo, ToastAndroid } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, TextInput, ToastAndroid } from 'react-native';
 import Styles from './styles';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
 import Header from '../../components/Header';
 import Swipeout from 'rc-swipeout';
-
-let SQLite = require('react-native-sqlite-storage');
 
 export default class Details extends Component {
 
@@ -14,17 +12,8 @@ export default class Details extends Component {
 
     this.state = {      
       data: [],
-      status: false,
       total: 0.00
     };
-
-    NetInfo.isConnected.fetch().done((isConnected) => {
-      this.setState({ status: isConnected });
-    });
-
-    NetInfo.isConnected.addEventListener('connectionChange', (res) => {
-      this.setState({ status: res });
-    });
   }
 
   static navigationOptions = {
@@ -57,17 +46,13 @@ export default class Details extends Component {
   }
   
   saveData() {    
-    let db = SQLite.openDatabase({name: 'database.db',createFromLocation:'~database.db'});
-    db.transaction((tx) => {         
-      tx.executeSql('UPDATE Lists SET sync="false",items = ? WHERE id = ?',
-          [JSON.stringify(this.state.data.items),this.state.data.id], (tx, results) => {                          
-          if(results.rowsAffected>0){
-            ToastAndroid.show('Lista Atualizada com Sucesso', ToastAndroid.SHORT);
-          }                
-       }, function (error){
-          ToastAndroid.show('Erro ao Atualizar Lista', ToastAndroid.SHORT);
-        });
-    });
+    Database.updateList(JSON.stringify(this.state.data.items),this.state.data.id)
+    .then(data => {
+      ToastAndroid.show('Lista Atualizada com Sucesso', ToastAndroid.SHORT);
+    })
+    .catch(error => {
+      ToastAndroid.show(error, ToastAndroid.SHORT);
+    });       
     this.refresh();    
   }
 

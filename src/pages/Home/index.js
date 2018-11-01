@@ -1,13 +1,9 @@
 import React, { Component } from 'react';
-import { View, Text, FlatList, TouchableOpacity, AsyncStorage, Alert, NetInfo } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, Alert, ToastAndroid } from 'react-native';
 import Styles from './styles';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
 import Header from '../../components/Header';
-import Api from '../../services/api';
 import Database from '../../services/storage';
-
-let SQLite = require('react-native-sqlite-storage');
-let db = SQLite.openDatabase({name: 'database.db',createFromLocation:'~database.db'});
 
 export default class Home extends Component {
 
@@ -20,19 +16,10 @@ export default class Home extends Component {
 
     this.state = {
       data: [],
-      refresh: true,
-      status: false
+      refresh: true
     };
 
     this.refresh = this.refresh.bind(this);
-
-    NetInfo.isConnected.fetch().done((isConnected) => {
-      this.setState({ status: isConnected });
-    });
-
-    NetInfo.isConnected.addEventListener('connectionChange', (res) => {
-      this.setState({ status: res });
-    });
   }
 
   selectItem(item) {
@@ -54,14 +41,15 @@ export default class Home extends Component {
     ];  
   }
 
-  removeItem(id) {    
-    db.transaction((tx) => {         
-      tx.executeSql('UPDATE Lists SET active="false",sync="false" WHERE id=?',[id], (tx, results) => {                                  
-          ToastAndroid.show('Lista Excluida com Sucesso', ToastAndroid.SHORT);
-      }, function (error){
-          alert(JSON.stringify(error));
-      });
-    });
+  removeItem(id) {
+    Database.deleteList(id)
+    .then(data => {
+      ToastAndroid.show('Lista Excluida com Sucesso', ToastAndroid.SHORT);
+    })
+    .catch(error => {
+      ToastAndroid.show(error, ToastAndroid.SHORT);
+    });   
+        
     this.refresh();
   }
 
@@ -82,24 +70,14 @@ export default class Home extends Component {
     )
   }
 
-  getList() {   
-    db.transaction((tx) => {         
-      tx.executeSql('SELECT * FROM Lists WHERE active="true"', [], (tx, results) => {                          
-          let items = []; 
-          for(let i=0;i<results.rows.length;i++){
-            let obj = {
-              id: results.rows.item(i).id,
-              name: results.rows.item(i).name,
-              idUser: results.rows.item(i).idUser,
-              items: JSON.parse(results.rows.item(i).items)
-            }
-            items.push(obj);
-          }
-          this.setState({ data: items });          
-       }, function (error){
-          alert(JSON.stringify(error));
-        });
-    });
+  getList() {
+    Database.getLists()
+    .then(data => {
+      this.setState({ data: data });
+    })
+    .catch(error => {
+      ToastAndroid.show(error, ToastAndroid.SHORT);
+    })       
   };
 
   render() {
@@ -127,7 +105,7 @@ export default class Home extends Component {
               return (
                 <TouchableOpacity onPress={() => this.selectItem(item)}>
                   <View style={Styles.itemListView}>
-                    <TouchableOpacity onPress={() => this.removeItem(item.id)}>
+                    <TouchableOpacity onPress={() => this.confirmationRemoveItem(item.id)}>
                       <FontAwesome style={Styles.minusBarButton}>{Icons.minusSquare}</FontAwesome>
                     </TouchableOpacity>
                     <Text style={Styles.itemListText}>{item.name}</Text>
@@ -144,4 +122,3 @@ export default class Home extends Component {
     );
   }
 }
-//this.confirmationRemoveItem(item)

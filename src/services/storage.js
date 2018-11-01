@@ -64,7 +64,30 @@ const storage = ({
             });
         });
     },
-
+    async logout(){        
+        return new Promise((resolve, reject) => {
+            db.transaction((tx) => {
+                tx.executeSql('DELETE FROM User',[], (tx, results) => {                                
+                    tx.executeSql('DELETE FROM Lists',[], (tx, results) => {                                
+                        resolve(true);
+                    });
+                });
+            });
+        });   
+    },
+    async loadDataUser(){
+        return new Promise((resolve, reject) => {
+            db.transaction((tx) => {
+                tx.executeSql('SELECT name,email FROM User', [], (tx, results) => {                                
+                    let row = {
+                        name: results.rows.item(0).name,
+                        email: results.rows.item(0).email                
+                    }
+                    resolve(row);
+                });
+            });
+        });
+    },
     async sync(){
         const id = await this.getIdUser();
         const noSync = await this.getNoSync(); 
@@ -110,7 +133,52 @@ const storage = ({
                 }
                 this.deleteData(noSync[i].id);
             }
+        }
+        else{
+            ToastAndroid.show("Dados Sincronizados", ToastAndroid.SHORT);
         }                        
+    },
+    async getLists(){
+        return new Promise((resolve, reject) => {
+            db.transaction((tx) => {
+                tx.executeSql('SELECT * FROM Lists WHERE active="true"', [], (tx, results) => {                                
+                    let lists=[];
+                    for(let i=0;i<results.rows.length;i++){
+                        let row = results.rows.item(i);
+                        lists.push(row); 
+                    }                                   
+                    resolve(lists);
+                });
+            });
+        });    
+    },
+    async deleteList(id){
+        return new Promise((resolve, reject) => {
+            db.transaction((tx) => {
+                tx.executeSql('UPDATE Lists SET active="false",sync="false" WHERE id=?',[id], (tx, results) => {                                
+                    if(results.rowsAffected.length>0){
+                        resolve(true);
+                    }
+                    else{
+                        resolve(false);
+                    }
+                });
+            });
+        });    
+    },
+    async updateList(data,id){
+        return new Promise((resolve, reject) => {
+            db.transaction((tx) => {
+                tx.executeSql('UPDATE Lists SET sync="false",items = ? WHERE id = ?',[data,id], (tx, results) => {                                
+                    if(results.rowsAffected.length>0){
+                        resolve(true);
+                    }
+                    else{
+                        resolve(false);
+                    }
+                });
+            });
+        });   
     }
 });
 

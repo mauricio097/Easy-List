@@ -3,6 +3,7 @@ import { View, TextInput, FlatList, Text, TouchableOpacity , AsyncStorage , NetI
 import Styles from './styles';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
 import Header from '../../components/Header';
+import { Divider } from 'react-native-elements';
 
 
 
@@ -112,7 +113,7 @@ export default class New extends Component {
                         <FontAwesome style={Styles.addBarButton}>{Icons.plusSquare}</FontAwesome>
                     </TouchableOpacity>
                 </View>
-
+                
                 <View style={Styles.containerView}>
                     <FlatList
                         data={this.state.items}

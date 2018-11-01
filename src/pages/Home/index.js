@@ -4,9 +4,10 @@ import Styles from './styles';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
 import Header from '../../components/Header';
 import Api from '../../services/api';
-import storage from '../../services/storage';
+import Database from '../../services/storage';
 
-var SQLite = require('react-native-sqlite-storage');
+let SQLite = require('react-native-sqlite-storage');
+let db = SQLite.openDatabase({name: 'database.db',createFromLocation:'~database.db'});
 
 export default class Home extends Component {
 
@@ -50,11 +51,17 @@ export default class Home extends Component {
   componentDidMount() {
     this.subs = [
       this.props.navigation.addListener('willFocus', () => this.refresh()),
-    ];
+    ];  
   }
 
-  removeItem(id) {
-    storage.delete(id);
+  removeItem(id) {    
+    db.transaction((tx) => {         
+      tx.executeSql('UPDATE Lists SET active="false",sync="false" WHERE id=?',[id], (tx, results) => {                                  
+          ToastAndroid.show('Lista Excluida com Sucesso', ToastAndroid.SHORT);
+      }, function (error){
+          alert(JSON.stringify(error));
+      });
+    });
     this.refresh();
   }
 
@@ -75,8 +82,7 @@ export default class Home extends Component {
     )
   }
 
-  async getList() {
-    let db = SQLite.openDatabase({name: 'database.db',createFromLocation:'~database.db'});
+  getList() {   
     db.transaction((tx) => {         
       tx.executeSql('SELECT * FROM Lists WHERE active="true"', [], (tx, results) => {                          
           let items = []; 

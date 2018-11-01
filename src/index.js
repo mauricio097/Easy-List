@@ -5,6 +5,8 @@ import { YellowBox, ToastAndroid } from 'react-native';
 import Api from './services/api';
 var SQLite = require('react-native-sqlite-storage');
 
+import Database from './services/storage';
+
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
 export default class App extends React.Component {
@@ -19,7 +21,7 @@ export default class App extends React.Component {
     this.isLogged();
   } 
   
-  isLogged(){
+  isLogged(){    
     let db = SQLite.openDatabase({name: 'database.db',createFromLocation:'~database.db'});
     db.transaction((tx) => {      
     tx.executeSql('SELECT * FROM User', [], (tx, results) => {             

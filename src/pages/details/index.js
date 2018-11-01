@@ -5,7 +5,7 @@ import FontAwesome, { Icons } from 'react-native-fontawesome';
 import Header from '../../components/Header';
 import Swipeout from 'rc-swipeout';
 
-var SQLite = require('react-native-sqlite-storage');
+let SQLite = require('react-native-sqlite-storage');
 
 export default class Details extends Component {
 
@@ -59,7 +59,7 @@ export default class Details extends Component {
   saveData() {    
     let db = SQLite.openDatabase({name: 'database.db',createFromLocation:'~database.db'});
     db.transaction((tx) => {         
-      tx.executeSql('UPDATE Lists SET items = ? WHERE id = ?',
+      tx.executeSql('UPDATE Lists SET sync="false",items = ? WHERE id = ?',
           [JSON.stringify(this.state.data.items),this.state.data.id], (tx, results) => {                          
           if(results.rowsAffected>0){
             ToastAndroid.show('Lista Atualizada com Sucesso', ToastAndroid.SHORT);

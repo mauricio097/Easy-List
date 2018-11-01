@@ -4,7 +4,8 @@ import Styles from './styles';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
 import Header from '../../components/Header';
 import { Avatar } from 'react-native-elements';
-import storage from '../../services/storage';
+import Database from '../../services/storage';
+let SQLite = require('react-native-sqlite-storage');
 
 export default class Settings extends Component {
 
@@ -32,13 +33,13 @@ export default class Settings extends Component {
   }
 
   sync(){
-    storage.sync();
+    Database.sync();
   }
 
   logout() {
-    /*let db = SQLite.openDatabase({name: 'database.db',createFromLocation:'~database.db'});
+    let db = SQLite.openDatabase({name: 'database.db',createFromLocation:'~database.db'});
     db.transaction((tx) => {         
-    tx.executeSql('Delete from Users', [], (tx, results) => {      
+    tx.executeSql('Delete from User', [], (tx, results) => {      
       db.transaction((tx) => {         
         tx.executeSql('Delete from Lists', [], (tx, results) => {      
             if(results.rowsAffected > 0)                                       
@@ -51,8 +52,6 @@ export default class Settings extends Component {
         ToastAndroid.show('Erro ao Fazer Logout', ToastAndroid.SHORT);
         });
     });
-*/
-    
   }
 
   render() {

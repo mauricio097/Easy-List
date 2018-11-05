@@ -6,7 +6,6 @@ import Header from '../../components/Header';
 import { Avatar } from 'react-native-elements';
 import Database from '../../services/storage';
 
-
 export default class Settings extends Component {
 
   constructor(props) {
@@ -16,27 +15,13 @@ export default class Settings extends Component {
       name:'',
       email:'',
       nameIcon:'',
-      status:null
-    };
-
-    NetInfo.isConnected.fetch().done((isConnected) => {
-      this.setState({ status: isConnected });
-      if(!isConnected){
-        ToastAndroid.show('Você está Offline', ToastAndroid.SHORT);
-      }
-    });
-
-    NetInfo.isConnected.addEventListener('connectionChange', (res) => {
-      this.setState({ status: res });
-      if(res){
-        ToastAndroid.show('Você está Online', ToastAndroid.SHORT);
-      }
-    });
-  
+      status:false      
+    };  
+    
   }
 
   async componentDidMount(){
-    const dataUser = await Database.loadDataUser();    
+    const dataUser = await Database.loadDataUser();     
     this.setState({name: dataUser.name,email: dataUser.email});
     this.formatName();
   }
@@ -51,18 +36,21 @@ export default class Settings extends Component {
 
   about() {
     Alert.alert('Sobre',
-    'Easy List 2018 - All Right Reserved ®'
+    'Easy List 2018 - Desenvolvido para Tech'
     );
   }
 
   sync(){
-    if(this.state.status){
-      ToastAndroid.show("Sincronizando Dados...", ToastAndroid.SHORT);
-      Database.sync();
-    }
-    else{
-      ToastAndroid.show("Você Não Está Conectado à Internet...", ToastAndroid.SHORT);
-    }
+    NetInfo.isConnected.fetch().done((isConnected) => {
+     if(isConnected){      
+        ToastAndroid.show("Sincronizando Dados...", ToastAndroid.SHORT);
+        Database.sync();
+      }
+      else{
+        ToastAndroid.show("Você Não Está Conectado à Internet...", ToastAndroid.SHORT);
+      }
+    });
+    
   }
 
   logout() {

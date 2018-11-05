@@ -105,7 +105,7 @@ export default class Home extends Component {
               return (
                 <TouchableOpacity onPress={() => this.selectItem(item)}>
                   <View style={Styles.itemListView}>
-                    <TouchableOpacity onPress={() => this.confirmationRemoveItem(item.id)}>
+                    <TouchableOpacity onPress={() => this.confirmationRemoveItem(item)}>
                       <FontAwesome style={Styles.minusBarButton}>{Icons.minusSquare}</FontAwesome>
                     </TouchableOpacity>
                     <Text style={Styles.itemListText}>{item.name}</Text>

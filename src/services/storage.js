@@ -191,8 +191,13 @@ const storage = ({
     async authenticate(){
         return new Promise((resolve, reject) => {
             db.transaction((tx) => {
-                tx.executeSql('SELECT * FROM User LIMIT 1', [], (tx, results) => {                                
-                    resolve(results.rows.length);
+                tx.executeSql('SELECT * FROM User LIMIT 1', [], (tx, results) => { 
+                    if(results.rows.length>0){
+                        resolve(true);
+                    }
+                    else{
+                        resolve(false);
+                    }
                 });
             });
         });    

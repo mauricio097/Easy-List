@@ -15,6 +15,16 @@ const storage = ({
             });
         });
     },
+    async getToken(){
+        return new Promise((resolve, reject) => {
+            db.transaction((tx) => {
+                tx.executeSql('SELECT token FROM User', [], (tx, results) => {                                
+                    let row = results.rows.item(0);                
+                    resolve(row.token);
+                });
+            });
+        });
+    },
     async getNoSync() {
         return new Promise((resolve, reject) => {
             db.transaction((tx) => {            
@@ -41,6 +51,17 @@ const storage = ({
             return response.data;
           } catch (error) {
             alert(error);
+          }
+    },
+    async validToken(){                
+        try {
+            const response = await Api.get(`/list/`);
+            return true;            
+          } catch (error) {
+              const status = JSON.stringify(error.request.status);
+              if(status==401){               
+                return false;
+              }
           }
     },
     searchObj(item,dataApi){
